@@ -28,13 +28,11 @@ export const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-xl flex items-center justify-center">
-              <span className="text-xl font-bold text-primary-foreground">CF</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gradient">CloudFlex IT</h1>
-              <p className="text-xs text-muted-foreground">Solutions, Inc.</p>
-            </div>
+            <img 
+              src="/lovable-uploads/150e1cc4-3d27-4824-96ed-6e2316318a78.png" 
+              alt="CloudFlex IT Solutions" 
+              className="h-10 w-auto"
+            />
           </div>
 
           {/* Desktop Navigation */}
