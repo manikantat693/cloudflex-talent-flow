@@ -132,33 +132,41 @@ export const ServicesSection = () => {
           })}
         </div>
 
-        {/* AI Resume Review CTA */}
+        {/* Process to Industries CTA */}
         <div className="text-center">
           <div className="glass-card p-8 max-w-4xl mx-auto">
             <div className="flex items-center justify-center mb-6">
               <div className="p-4 bg-gradient-to-r from-primary to-accent rounded-full">
-                <Brain className="w-8 h-8 text-white" />
+                <BarChart3 className="w-8 h-8 text-white" />
               </div>
             </div>
             <h3 className="text-3xl font-bold mb-4">
-              AI-Powered Resume Review
+              Our Process-Driven Approach
             </h3>
             <p className="text-muted-foreground mb-8 text-lg">
-              Upload your resume and get instant AI analysis with personalized recommendations, 
-              ATS optimization tips, and industry-specific insights to boost your career prospects.
+              We follow a systematic process to deliver exceptional results across multiple industries. 
+              Discover how our expertise spans various sectors to meet your specific business needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 variant="gradient" 
                 size="lg" 
                 className="group"
+                onClick={() => {
+                  const industriesSection = document.getElementById('industries');
+                  industriesSection?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Users className="w-5 h-5 mr-2" />
+                Explore Industries We Serve
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
                 onClick={() => setIsResumeModalOpen(true)}
               >
                 <FileSearch className="w-5 h-5 mr-2" />
                 Get AI Resume Review
-              </Button>
-              <Button variant="outline" size="lg">
-                Learn More About Our AI
               </Button>
             </div>
           </div>

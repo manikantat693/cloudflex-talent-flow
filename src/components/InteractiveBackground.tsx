@@ -1,24 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface Particle {
+interface Dot {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
-  size: number;
-  color: string;
-  life: number;
-  maxLife: number;
-  clickable: boolean;
-  pulsing: boolean;
+  filled: boolean;
+  filling: boolean;
+  fillProgress: number;
 }
 
 export const InteractiveBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
+  const dotsRef = useRef<Dot[]>([]);
   const animationIdRef = useRef<number>();
-  const [score, setScore] = useState(0);
-  const [showScore, setShowScore] = useState(false);
+  const [totalFilled, setTotalFilled] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -31,89 +25,65 @@ export const InteractiveBackground = () => {
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      initDots();
     };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Initialize background particles
-    const initBackgroundParticles = () => {
-      for (let i = 0; i < 30; i++) {
-        particlesRef.current.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 1,
-          vy: (Math.random() - 0.5) * 1,
-          size: Math.random() * 8 + 5,
-          color: `hsl(${200 + Math.random() * 60}, 70%, ${50 + Math.random() * 30}%)`,
-          life: 1,
-          maxLife: 1,
-          clickable: true,
-          pulsing: Math.random() > 0.5,
-        });
+    // Initialize dots in a grid pattern
+    const initDots = () => {
+      dotsRef.current = [];
+      const spacing = 50;
+      const offsetX = spacing / 2;
+      const offsetY = spacing / 2;
+      
+      for (let x = offsetX; x < canvas.width; x += spacing) {
+        for (let y = offsetY; y < canvas.height; y += spacing) {
+          // Add some randomness to make it look more organic
+          const randomX = x + (Math.random() - 0.5) * 10;
+          const randomY = y + (Math.random() - 0.5) * 10;
+          
+          dotsRef.current.push({
+            x: randomX,
+            y: randomY,
+            filled: false,
+            filling: false,
+            fillProgress: 0,
+          });
+        }
       }
     };
 
-    initBackgroundParticles();
+    initDots();
 
-    // Click handler for collecting particles
+    // Click handler for filling dots
     const handleClick = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
 
-      // Check if any particle was clicked
-      particlesRef.current = particlesRef.current.filter(particle => {
-        if (!particle.clickable) return true;
-        
-        const dx = particle.x - clickX;
-        const dy = particle.y - clickY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < particle.size + 10) {
-          // Particle clicked! Remove it and add to score
-          setScore(prev => prev + 10);
-          setShowScore(true);
-          setTimeout(() => setShowScore(false), 1000);
+      // Find the closest dot within range
+      let closestDot: Dot | null = null;
+      let minDistance = Infinity;
+
+      dotsRef.current.forEach(dot => {
+        if (!dot.filled && !dot.filling) {
+          const dx = dot.x - clickX;
+          const dy = dot.y - clickY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
           
-          // Create explosion effect
-          for (let i = 0; i < 8; i++) {
-            const angle = (Math.PI * 2 * i) / 8;
-            const speed = Math.random() * 3 + 1;
-            particlesRef.current.push({
-              x: particle.x,
-              y: particle.y,
-              vx: Math.cos(angle) * speed,
-              vy: Math.sin(angle) * speed,
-              size: Math.random() * 4 + 2,
-              color: particle.color,
-              life: 60,
-              maxLife: 60,
-              clickable: false,
-              pulsing: false,
-            });
+          if (distance < 25 && distance < minDistance) {
+            minDistance = distance;
+            closestDot = dot;
           }
-          
-          // Spawn new particle to replace it
-          setTimeout(() => {
-            particlesRef.current.push({
-              x: Math.random() * canvas.width,
-              y: Math.random() * canvas.height,
-              vx: (Math.random() - 0.5) * 1,
-              vy: (Math.random() - 0.5) * 1,
-              size: Math.random() * 8 + 5,
-              color: `hsl(${200 + Math.random() * 60}, 70%, ${50 + Math.random() * 30}%)`,
-              life: 1,
-              maxLife: 1,
-              clickable: true,
-              pulsing: Math.random() > 0.5,
-            });
-          }, 2000);
-          
-          return false; // Remove the clicked particle
         }
-        return true;
       });
+
+      if (closestDot) {
+        closestDot.filling = true;
+        setTotalFilled(prev => prev + 1);
+      }
     };
 
     document.addEventListener('click', handleClick);
@@ -122,62 +92,55 @@ export const InteractiveBackground = () => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Update and draw particles
-      particlesRef.current = particlesRef.current.filter(particle => {
-        // Update position
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-        
-        // Update life for explosion particles
-        if (!particle.clickable) {
-          particle.life--;
+      // Update and draw dots
+      dotsRef.current.forEach(dot => {
+        // Update filling animation
+        if (dot.filling) {
+          dot.fillProgress += 0.05;
+          if (dot.fillProgress >= 1) {
+            dot.fillProgress = 1;
+            dot.filling = false;
+            dot.filled = true;
+          }
         }
 
-        // Wrap around screen for clickable particles
-        if (particle.clickable) {
-          if (particle.x < -particle.size) particle.x = canvas.width + particle.size;
-          if (particle.x > canvas.width + particle.size) particle.x = -particle.size;
-          if (particle.y < -particle.size) particle.y = canvas.height + particle.size;
-          if (particle.y > canvas.height + particle.size) particle.y = -particle.size;
-        }
-
-        // Calculate size with pulsing effect
-        let currentSize = particle.size;
-        if (particle.pulsing && particle.clickable) {
-          currentSize += Math.sin(Date.now() * 0.005) * 2;
-        }
-
-        // Draw particle
+        // Draw dot
         ctx.save();
         
-        // Set opacity
-        if (particle.clickable) {
-          ctx.globalAlpha = 0.7;
-        } else {
-          ctx.globalAlpha = particle.life / particle.maxLife * 0.8;
-        }
-        
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.fill();
-        
-        // Add glow effect for clickable particles
-        if (particle.clickable) {
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = particle.color;
+        if (dot.filled || dot.filling) {
+          // Filled or filling dot
+          const progress = dot.fillProgress;
+          const radius = 4 * progress;
+          
+          ctx.beginPath();
+          ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `hsl(217, 91%, ${60 + progress * 20}%)`;
           ctx.fill();
           
-          // Add ring effect for clickable particles
+          // Add glow effect
+          ctx.shadowBlur = 15 * progress;
+          ctx.shadowColor = `hsl(217, 91%, 60%)`;
+          ctx.fill();
+          
+          // Add outer ring for filling animation
+          if (dot.filling) {
+            ctx.globalAlpha = 0.5;
+            ctx.beginPath();
+            ctx.arc(dot.x, dot.y, 6, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsl(217, 91%, 70%)`;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+        } else {
+          // Empty dot
           ctx.globalAlpha = 0.3;
-          ctx.strokeStyle = particle.color;
-          ctx.lineWidth = 2;
-          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(dot.x, dot.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = `hsl(217, 91%, 80%)`;
+          ctx.fill();
         }
         
         ctx.restore();
-
-        return particle.clickable || particle.life > 0;
       });
 
       animationIdRef.current = requestAnimationFrame(animate);
@@ -201,16 +164,12 @@ export const InteractiveBackground = () => {
         className="fixed inset-0 pointer-events-auto z-0 cursor-crosshair"
         style={{ background: 'transparent' }}
       />
-      {showScore && (
-        <div className="fixed top-6 right-6 z-50 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full shadow-lg animate-bounce">
-          <div className="text-lg font-bold">+10 Points!</div>
-          <div className="text-sm">Score: {score}</div>
+      {totalFilled > 0 && (
+        <div className="fixed top-6 left-6 z-50 bg-white/80 backdrop-blur-sm text-primary px-4 py-2 rounded-lg shadow-lg border border-primary/20">
+          <div className="text-sm font-medium">✨ Dots Filled</div>
+          <div className="text-lg font-bold">{totalFilled}</div>
         </div>
       )}
-      <div className="fixed top-6 left-6 z-50 bg-white/80 backdrop-blur-sm text-primary px-4 py-2 rounded-lg shadow-lg border border-primary/20">
-        <div className="text-sm font-medium">🎮 Bubble Game</div>
-        <div className="text-lg font-bold">Score: {score}</div>
-      </div>
     </>
   );
 };
