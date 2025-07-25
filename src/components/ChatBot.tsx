@@ -109,12 +109,13 @@ export const ChatBot = () => {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center">
+        <div className="bg-white text-primary px-4 py-2 rounded-lg shadow-lg mb-2 text-sm font-medium border border-primary/20">
+          Ask me anything!
+        </div>
         <Button
           onClick={() => setIsOpen(true)}
-          variant="gradient"
-          size="lg"
-          className="rounded-full w-16 h-16 shadow-lg hover:shadow-[var(--shadow-glow)] animate-pulse-slow"
+          className="rounded-full w-16 h-16 shadow-lg hover:shadow-[var(--shadow-glow)] animate-pulse-slow bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white border-0"
         >
           <MessageCircle className="w-8 h-8" />
         </Button>

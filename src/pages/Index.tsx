@@ -1,4 +1,5 @@
 import { CustomCursor } from '@/components/CustomCursor';
+import { InteractiveBackground } from '@/components/InteractiveBackground';
 import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
 import { AboutSection } from '@/components/AboutSection';
@@ -10,7 +11,8 @@ import { ChatBot } from '@/components/ChatBot';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background font-inter">
+    <div className="min-h-screen bg-background font-inter relative">
+      <InteractiveBackground />
       <CustomCursor />
       <Navbar />
       <main>
