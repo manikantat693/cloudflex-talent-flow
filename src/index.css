@@ -1,42 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* CloudFlex IT Solutions - Modern Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    /* Core Brand Colors */
+    --background: 220 26% 5%;
+    --foreground: 213 31% 91%;
+    
+    --card: 220 25% 8%;
+    --card-foreground: 213 31% 91%;
+    
+    --popover: 220 25% 8%;
+    --popover-foreground: 213 31% 91%;
+    
+    /* CloudFlex Brand Colors */
+    --primary: 217 91% 60%;
+    --primary-foreground: 220 26% 5%;
+    --primary-glow: 217 91% 70%;
+    
+    --secondary: 220 25% 12%;
+    --secondary-foreground: 213 31% 91%;
+    
+    --muted: 220 25% 12%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 142 86% 60%;
+    --accent-foreground: 220 26% 5%;
+    --accent-glow: 142 86% 70%;
+    
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 213 31% 91%;
+    
+    --border: 220 25% 15%;
+    --input: 220 25% 12%;
+    --ring: 217 91% 60%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(142 86% 60%));
+    --gradient-hero: linear-gradient(180deg, hsl(220 26% 5%), hsl(220 25% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(220 25% 8% / 0.8), hsl(220 25% 12% / 0.6));
+    --gradient-glass: linear-gradient(145deg, hsl(217 91% 60% / 0.1), hsl(142 86% 60% / 0.05));
+    
+    /* Shadows & Effects */
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.3);
+    --shadow-accent: 0 0 30px hsl(142 86% 60% / 0.2);
+    --shadow-card: 0 8px 32px hsl(220 26% 5% / 0.6);
+    
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -97,9 +112,127 @@ All colors MUST be HSL.
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Custom Cursor */
+  .custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+
+  .custom-cursor-follower {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 2px solid hsl(var(--primary));
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0.6;
+  }
+
+  /* Glassmorphism Effects */
+  .glass-card {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--border) / 0.2);
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass-nav {
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid hsl(var(--border) / 0.1);
+  }
+
+  /* Hover Effects */
+  .hover-glow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-glow:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+  }
+
+  .hover-accent:hover {
+    box-shadow: var(--shadow-accent);
+  }
+
+  /* Text Effects */
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes glow {
+    from { box-shadow: 0 0 20px hsl(var(--primary) / 0.2); }
+    to { box-shadow: 0 0 40px hsl(var(--primary) / 0.4); }
+  }
+
+  /* Interactive Elements */
+  .interactive-element {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .interactive-element::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.4), transparent);
+    transition: left 0.5s;
+  }
+
+  .interactive-element:hover::before {
+    left: 100%;
   }
 }
