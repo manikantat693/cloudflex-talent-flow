@@ -21,16 +21,6 @@ export const InteractiveBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initDots();
-    };
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
     // Initialize dots in a grid pattern
     const initDots = () => {
       dotsRef.current = [];
@@ -55,7 +45,15 @@ export const InteractiveBackground = () => {
       }
     };
 
-    initDots();
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initDots();
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
     // Click handler for filling dots
     const handleClick = (e: MouseEvent) => {
