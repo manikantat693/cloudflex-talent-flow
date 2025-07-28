@@ -1,18 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-interface Dot {
+interface Particle {
   x: number;
   y: number;
-  filled: boolean;
-  filling: boolean;
-  fillProgress: number;
+  vx: number;
+  vy: number;
+  opacity: number;
 }
 
 export const InteractiveBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dotsRef = useRef<Dot[]>([]);
+  const particlesRef = useRef<Particle[]>([]);
   const animationIdRef = useRef<number>();
-  const [totalFilled, setTotalFilled] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -21,27 +20,19 @@ export const InteractiveBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Initialize dots in a grid pattern
-    const initDots = () => {
-      dotsRef.current = [];
-      const spacing = 50;
-      const offsetX = spacing / 2;
-      const offsetY = spacing / 2;
+    // Initialize particles
+    const initParticles = () => {
+      particlesRef.current = [];
+      const particleCount = 50;
       
-      for (let x = offsetX; x < canvas.width; x += spacing) {
-        for (let y = offsetY; y < canvas.height; y += spacing) {
-          // Add some randomness to make it look more organic
-          const randomX = x + (Math.random() - 0.5) * 10;
-          const randomY = y + (Math.random() - 0.5) * 10;
-          
-          dotsRef.current.push({
-            x: randomX,
-            y: randomY,
-            filled: false,
-            filling: false,
-            fillProgress: 0,
-          });
-        }
+      for (let i = 0; i < particleCount; i++) {
+        particlesRef.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          opacity: Math.random() * 0.5 + 0.2,
+        });
       }
     };
 
@@ -49,95 +40,58 @@ export const InteractiveBackground = () => {
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      initDots();
+      initParticles();
     };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Click handler for filling dots
-    const handleClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-
-      // Find the closest dot within range
-      let closestDot: Dot | null = null;
-      let minDistance = Infinity;
-
-      dotsRef.current.forEach(dot => {
-        if (!dot.filled && !dot.filling) {
-          const dx = dot.x - clickX;
-          const dy = dot.y - clickY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 25 && distance < minDistance) {
-            minDistance = distance;
-            closestDot = dot;
-          }
-        }
-      });
-
-      if (closestDot) {
-        closestDot.filling = true;
-        setTotalFilled(prev => prev + 1);
-      }
-    };
-
-    document.addEventListener('click', handleClick);
-
     // Animation loop
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Update and draw dots
-      dotsRef.current.forEach(dot => {
-        // Update filling animation
-        if (dot.filling) {
-          dot.fillProgress += 0.05;
-          if (dot.fillProgress >= 1) {
-            dot.fillProgress = 1;
-            dot.filling = false;
-            dot.filled = true;
-          }
-        }
+      // Update and draw particles
+      particlesRef.current.forEach((particle, index) => {
+        // Update position
+        particle.x += particle.vx;
+        particle.y += particle.vy;
 
-        // Draw dot
-        ctx.save();
-        
-        if (dot.filled || dot.filling) {
-          // Filled or filling dot
-          const progress = dot.fillProgress;
-          const radius = 4 * progress;
-          
-          ctx.beginPath();
-          ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
-          ctx.fillStyle = `hsl(217, 91%, ${60 + progress * 20}%)`;
-          ctx.fill();
-          
-          // Add glow effect
-          ctx.shadowBlur = 15 * progress;
-          ctx.shadowColor = `hsl(217, 91%, 60%)`;
-          ctx.fill();
-          
-          // Add outer ring for filling animation
-          if (dot.filling) {
-            ctx.globalAlpha = 0.5;
-            ctx.beginPath();
-            ctx.arc(dot.x, dot.y, 6, 0, Math.PI * 2);
-            ctx.strokeStyle = `hsl(217, 91%, 70%)`;
-            ctx.lineWidth = 2;
-            ctx.stroke();
+        // Bounce off edges
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+        // Keep particles within bounds
+        particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+
+        // Draw connections to nearby particles
+        particlesRef.current.forEach((otherParticle, otherIndex) => {
+          if (index !== otherIndex) {
+            const dx = particle.x - otherParticle.x;
+            const dy = particle.y - otherParticle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 100) {
+              ctx.save();
+              ctx.globalAlpha = (100 - distance) / 100 * 0.2;
+              ctx.strokeStyle = 'hsl(217, 91%, 60%)';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(particle.x, particle.y);
+              ctx.lineTo(otherParticle.x, otherParticle.y);
+              ctx.stroke();
+              ctx.restore();
+            }
           }
-        } else {
-          // Empty dot
-          ctx.globalAlpha = 0.3;
-          ctx.beginPath();
-          ctx.arc(dot.x, dot.y, 2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsl(217, 91%, 80%)`;
-          ctx.fill();
-        }
-        
+        });
+
+        // Draw particle
+        ctx.save();
+        ctx.globalAlpha = particle.opacity;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'hsl(217, 91%, 60%)';
+        ctx.fill();
         ctx.restore();
       });
 
@@ -148,7 +102,6 @@ export const InteractiveBackground = () => {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      document.removeEventListener('click', handleClick);
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
       }
@@ -156,18 +109,10 @@ export const InteractiveBackground = () => {
   }, []);
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-auto z-0 cursor-crosshair"
-        style={{ background: 'transparent' }}
-      />
-      {totalFilled > 0 && (
-        <div className="fixed top-6 left-6 z-50 bg-white/80 backdrop-blur-sm text-primary px-4 py-2 rounded-lg shadow-lg border border-primary/20">
-          <div className="text-sm font-medium">✨ Dots Filled</div>
-          <div className="text-lg font-bold">{totalFilled}</div>
-        </div>
-      )}
-    </>
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0"
+      style={{ background: 'transparent' }}
+    />
   );
 };
