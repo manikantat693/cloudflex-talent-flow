@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Code, Users, Shield, Globe, ArrowRight, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { AboutModal } from './AboutModal';
 
 export const AboutSection = () => {
+  const [aboutModalOpen, setAboutModalOpen] = useState(false);
+
   const services = [
     {
       icon: <Users className="w-8 h-8" />,
@@ -55,7 +59,7 @@ export const AboutSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-20">
           {/* Content */}
           <div>
             <h3 className="text-3xl font-bold mb-6">
@@ -76,31 +80,36 @@ export const AboutSection = () => {
               ))}
             </div>
 
-            <Button variant="gradient" size="lg" className="group">
+            <Button 
+              variant="gradient" 
+              size="lg" 
+              className="group w-full sm:w-auto"
+              onClick={() => setAboutModalOpen(true)}
+            >
               Learn More About Us
               <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
 
           {/* Stats Card */}
-          <div className="glass-card p-8">
-            <h4 className="text-2xl font-bold mb-6 text-center">Our Impact</h4>
-            <div className="grid grid-cols-2 gap-6">
+          <div className="glass-card p-6 sm:p-8">
+            <h4 className="text-xl sm:text-2xl font-bold mb-6 text-center">Our Impact</h4>
+            <div className="grid grid-cols-2 gap-4 sm:gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-gradient mb-2">450+</div>
-                <div className="text-sm text-muted-foreground">Professionals<br />Placed</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gradient mb-2">450+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Professionals<br />Placed</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-gradient mb-2">98%</div>
-                <div className="text-sm text-muted-foreground">Success<br />Rate</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gradient mb-2">98%</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Success<br />Rate</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-gradient mb-2">50+</div>
-                <div className="text-sm text-muted-foreground">Enterprise<br />Clients</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gradient mb-2">50+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Enterprise<br />Clients</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-gradient mb-2">5+</div>
-                <div className="text-sm text-muted-foreground">Years<br />Experience</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gradient mb-2">5+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Years<br />Experience</div>
               </div>
             </div>
           </div>
@@ -112,19 +121,19 @@ export const AboutSection = () => {
             Comprehensive <span className="text-gradient">Services</span>
           </h3>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="group cursor-pointer">
+              <Card key={index} className="group cursor-pointer h-full">
                 <CardHeader className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <div className="text-primary-foreground">
                       {service.icon}
                     </div>
                   </div>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground text-center leading-relaxed">
+                  <p className="text-muted-foreground text-center leading-relaxed text-sm sm:text-base">
                     {service.description}
                   </p>
                 </CardContent>
@@ -133,6 +142,12 @@ export const AboutSection = () => {
           </div>
         </div>
       </div>
+
+      {/* About Modal */}
+      <AboutModal
+        isOpen={aboutModalOpen}
+        onClose={() => setAboutModalOpen(false)}
+      />
     </section>
   );
 };

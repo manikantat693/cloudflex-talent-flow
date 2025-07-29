@@ -1,13 +1,18 @@
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { 
   Heart, 
   CreditCard, 
   ShoppingCart, 
   GraduationCap, 
   Factory, 
-  Laptop 
+  Laptop,
+  Calendar,
+  BookOpen
 } from 'lucide-react';
+import { CaseStudiesModal } from './CaseStudiesModal';
 
 const industries = [
   {
@@ -49,6 +54,8 @@ const industries = [
 ];
 
 export const IndustriesSection = () => {
+  const [caseStudiesOpen, setCaseStudiesOpen] = useState(false);
+
   return (
     <section id="industries" className="py-20 bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4">
@@ -67,22 +74,23 @@ export const IndustriesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {industries.map((industry, index) => (
             <Card 
               key={index} 
-              className="glass-card hover-glow group cursor-pointer transition-all duration-300"
+              className="glass-card hover-glow group cursor-pointer transition-all duration-300 h-full"
+              onClick={() => setCaseStudiesOpen(true)}
             >
               <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 w-fit">
-                  <industry.icon className={`w-8 h-8 ${industry.color}`} />
+                <div className="mx-auto mb-4 p-3 sm:p-4 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 w-fit">
+                  <industry.icon className={`w-6 h-6 sm:w-8 sm:h-8 ${industry.color}`} />
                 </div>
-                <CardTitle className="text-xl font-semibold group-hover:text-gradient transition-all duration-300">
+                <CardTitle className="text-lg sm:text-xl font-semibold group-hover:text-gradient transition-all duration-300">
                   {industry.title}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-center text-muted-foreground leading-relaxed">
+                <CardDescription className="text-center text-muted-foreground leading-relaxed text-sm sm:text-base">
                   {industry.description}
                 </CardDescription>
               </CardContent>
@@ -98,17 +106,40 @@ export const IndustriesSection = () => {
             <p className="text-muted-foreground mb-6">
               Let us help you leverage cutting-edge technology to drive innovation and growth in your sector.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-6 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-lg font-medium hover:shadow-[var(--shadow-glow)] transition-all duration-300">
-                Schedule Consultation
-              </button>
-              <button className="px-6 py-3 border border-primary text-primary rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300">
-                View Case Studies
-              </button>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <Button 
+                variant="gradient" 
+                size="lg"
+                className="text-sm sm:text-base"
+                onClick={() => {
+                  const contactSection = document.getElementById('contact');
+                  contactSection?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="hidden sm:inline">Schedule Consultation</span>
+                <span className="sm:hidden">Schedule Call</span>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="text-sm sm:text-base"
+                onClick={() => setCaseStudiesOpen(true)}
+              >
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="hidden sm:inline">View Case Studies</span>
+                <span className="sm:hidden">Case Studies</span>
+              </Button>
             </div>
           </Card>
         </div>
       </div>
+
+      {/* Case Studies Modal */}
+      <CaseStudiesModal
+        isOpen={caseStudiesOpen}
+        onClose={() => setCaseStudiesOpen(false)}
+      />
     </section>
   );
 };
