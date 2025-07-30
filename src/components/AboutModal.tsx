@@ -93,9 +93,8 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
         </DialogHeader>
 
         <Tabs defaultValue="story" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="story">Our Story</TabsTrigger>
-            <TabsTrigger value="team">Team</TabsTrigger>
             <TabsTrigger value="values">Values</TabsTrigger>
             <TabsTrigger value="achievements">Achievements</TabsTrigger>
           </TabsList>
@@ -161,44 +160,6 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="team" className="space-y-6">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold mb-4">Meet Our <span className="text-gradient">Expert Team</span></h3>
-              <p className="text-lg text-muted-foreground">
-                Our diverse team of experts brings decades of combined experience in technology, recruitment, and immigration.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {teamMembers.map((member, index) => (
-                <Card key={index} className="hover:scale-105 transition-transform">
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="text-4xl">{member.image}</div>
-                      <div>
-                        <CardTitle className="text-xl">{member.name}</CardTitle>
-                        <p className="text-primary font-medium">{member.role}</p>
-                        <Badge variant="outline">{member.experience}</Badge>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">{member.bio}</p>
-                    <div className="space-y-2">
-                      <h5 className="font-semibold text-sm">Specialties:</h5>
-                      <div className="flex flex-wrap gap-2">
-                        {member.specialties.map((specialty, idx) => (
-                          <Badge key={idx} variant="secondary" className="text-xs">
-                            {specialty}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
 
           <TabsContent value="values" className="space-y-6">
             <div className="text-center mb-8">

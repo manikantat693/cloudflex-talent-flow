@@ -23,14 +23,14 @@ export const HeroSection = () => {
         <div className="max-w-5xl mx-auto text-center">
           {/* Main Heading */}
           <div className="mb-8">
-            <h1 className="text-5xl md:text-7xl font-space font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-space font-bold mb-6 leading-tight">
               <span className="text-gradient">Transform</span> Your
-              <br />
-              Tech Career with
-              <br />
+              <br className="hidden sm:block" />
+              <span className="sm:block">Tech Career with</span>
+              <br className="hidden sm:block" />
               <span className="text-glow">CloudFlex IT</span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
               We specialize in placing top-tier IT professionals with leading companies while handling 
               all immigration and career development needs. Your success is our mission.
             </p>
@@ -57,29 +57,29 @@ export const HeroSection = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="glass-card p-8 text-center hover-glow">
-              <div className="w-16 h-16 bg-gradient-to-r from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 animate-glow">
-                <Users className="w-8 h-8 text-primary-foreground" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-4xl mx-auto px-4">
+            <div className="glass-card p-4 sm:p-8 text-center hover-glow">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-4 animate-glow">
+                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-primary-foreground" />
               </div>
-              <div className="text-4xl font-bold text-gradient mb-2">450+</div>
-              <div className="text-muted-foreground">Professionals Placed</div>
+              <div className="text-2xl sm:text-4xl font-bold text-gradient mb-2">450+</div>
+              <div className="text-sm sm:text-base text-muted-foreground">Professionals Placed</div>
             </div>
 
-            <div className="glass-card p-8 text-center hover-glow">
-              <div className="w-16 h-16 bg-gradient-to-r from-accent to-primary-glow rounded-2xl flex items-center justify-center mx-auto mb-4 animate-glow" style={{ animationDelay: '1s' }}>
-                <Award className="w-8 h-8 text-primary-foreground" />
+            <div className="glass-card p-4 sm:p-8 text-center hover-glow">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-accent to-primary-glow rounded-2xl flex items-center justify-center mx-auto mb-4 animate-glow" style={{ animationDelay: '1s' }}>
+                <Award className="w-6 h-6 sm:w-8 sm:h-8 text-primary-foreground" />
               </div>
-              <div className="text-4xl font-bold text-gradient mb-2">98%</div>
-              <div className="text-muted-foreground">Success Rate</div>
+              <div className="text-2xl sm:text-4xl font-bold text-gradient mb-2">98%</div>
+              <div className="text-sm sm:text-base text-muted-foreground">Success Rate</div>
             </div>
 
-            <div className="glass-card p-8 text-center hover-glow">
-              <div className="w-16 h-16 bg-gradient-to-r from-primary-glow to-primary rounded-2xl flex items-center justify-center mx-auto mb-4 animate-glow" style={{ animationDelay: '2s' }}>
-                <Building className="w-8 h-8 text-primary-foreground" />
+            <div className="glass-card p-4 sm:p-8 text-center hover-glow">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-primary-glow to-primary rounded-2xl flex items-center justify-center mx-auto mb-4 animate-glow" style={{ animationDelay: '2s' }}>
+                <Building className="w-6 h-6 sm:w-8 sm:h-8 text-primary-foreground" />
               </div>
-              <div className="text-4xl font-bold text-gradient mb-2">50+</div>
-              <div className="text-muted-foreground">Enterprise Clients</div>
+              <div className="text-2xl sm:text-4xl font-bold text-gradient mb-2">50+</div>
+              <div className="text-sm sm:text-base text-muted-foreground">Enterprise Clients</div>
             </div>
           </div>
         </div>
