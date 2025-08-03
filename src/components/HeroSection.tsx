@@ -31,8 +31,9 @@ export const HeroSection = () => {
               <span className="text-glow">CloudFlex IT</span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-              We specialize in placing top-tier IT professionals with leading companies while handling 
-              all immigration and career development needs. Your success is our mission.
+              CloudFlex Talent Flow leverages AI-driven technology to connect top-tier IT professionals 
+              with leading companies. Our next-gen staffing platform offers seamless job matching, 
+              immigration support, and career development solutions.
             </p>
           </div>
 
@@ -44,7 +45,7 @@ export const HeroSection = () => {
               onClick={scrollToJobs}
               className="group"
             >
-              Explore Opportunities
+              Get Started
               <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button 
@@ -52,7 +53,7 @@ export const HeroSection = () => {
               size="xl"
               onClick={scrollToContact}
             >
-              Partner With Us
+              Partner With CloudFlex
             </Button>
           </div>
 
