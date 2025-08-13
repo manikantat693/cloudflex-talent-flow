@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Brain, Users, FileSearch, Cloud, Shield, Zap, Code, Database, BarChart3, Eye } from 'lucide-react';
+import { Brain, Users, FileSearch, Cloud, Shield, Zap, Code, Database, BarChart3, Eye, MessageSquare } from 'lucide-react';
 import { ResumeReviewModal } from './ResumeReviewModal';
 import { ServiceDetailModal } from './ServiceDetailModal';
+import { MockInterviewModal } from './MockInterviewModal';
 
 export const ServicesSection = () => {
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+  const [isMockInterviewModalOpen, setIsMockInterviewModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [serviceModalOpen, setServiceModalOpen] = useState(false);
   const [activeServiceCategory, setActiveServiceCategory] = useState<string>('');
@@ -24,6 +26,13 @@ export const ServicesSection = () => {
       title: 'Smart Resume Review',
       description: 'AI-driven resume analysis that provides detailed insights and recommendations for both candidates and employers.',
       features: ['Keyword Optimization', 'ATS Compatibility', 'Skills Gap Analysis', 'Career Recommendations'],
+      category: 'AI Services'
+    },
+    {
+      icon: MessageSquare,
+      title: 'AI Mock Interview',
+      description: 'Personalized mock interviews with AI-generated questions based on your resume and target role.',
+      features: ['Resume Analysis', '10 Custom Questions', 'Performance Scoring', 'Detailed Feedback'],
       category: 'AI Services'
     },
     {
@@ -207,6 +216,16 @@ export const ServicesSection = () => {
                 <span className="hidden sm:inline">Get AI Resume Review</span>
                 <span className="sm:hidden">AI Resume Review</span>
               </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="text-sm sm:text-base"
+                onClick={() => setIsMockInterviewModalOpen(true)}
+              >
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="hidden sm:inline">AI Mock Interview</span>
+                <span className="sm:hidden">Mock Interview</span>
+              </Button>
             </div>
           </div>
         </div>
@@ -216,6 +235,12 @@ export const ServicesSection = () => {
       <ResumeReviewModal
         isOpen={isResumeModalOpen}
         onClose={() => setIsResumeModalOpen(false)}
+      />
+
+      {/* Mock Interview Modal */}
+      <MockInterviewModal
+        isOpen={isMockInterviewModalOpen}
+        onClose={() => setIsMockInterviewModalOpen(false)}
       />
 
       {/* Service Detail Modal */}
