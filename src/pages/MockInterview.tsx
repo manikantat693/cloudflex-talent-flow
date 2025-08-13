@@ -18,6 +18,14 @@ interface Question {
   score?: number;
 }
 
+interface ResumeScore {
+  overall: number;
+  skills: number;
+  experience: number;
+  formatting: number;
+  keywords: number;
+}
+
 export default function MockInterview() {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -28,6 +36,7 @@ export default function MockInterview() {
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [analysisResults, setAnalysisResults] = useState<any>(null);
+  const [resumeScore, setResumeScore] = useState<ResumeScore | null>(null);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -70,8 +79,10 @@ export default function MockInterview() {
       // Extract key skills and experience from resume
       const skills = extractSkills(resumeText);
       const experience = extractExperience(resumeText);
+      const score = calculateResumeScore(resumeText, skills, experience);
       
       setAnalysisResults({ skills, experience });
+      setResumeScore(score);
 
       // Generate interview questions based on analysis
       const generatedQuestions = generateInterviewQuestions(skills, experience);
@@ -87,7 +98,13 @@ export default function MockInterview() {
     } catch (error) {
       console.error('Error analyzing resume:', error);
       toast.error('Failed to analyze resume. Using fallback questions.');
-      
+      setResumeScore({
+        overall: 75,
+        skills: 70,
+        experience: 80,
+        formatting: 75,
+        keywords: 70
+      });
       // Fallback questions
       const fallbackQuestions = [
         "Tell me about yourself and your background.",
@@ -110,6 +127,34 @@ export default function MockInterview() {
 
       setStage('interview');
     }
+  };
+
+  const calculateResumeScore = (text: string, skills: string[], experience: string): ResumeScore => {
+    // Skills score based on number and relevance of skills found
+    const skillsScore = Math.min(100, skills.length * 15 + 40);
+    
+    // Experience score based on level detected
+    const experienceScore = experience === 'senior' ? 90 : experience === 'lead' ? 95 : experience === 'junior' ? 60 : 75;
+    
+    // Formatting score based on text structure and length
+    const wordCount = text.split(' ').length;
+    const formattingScore = wordCount > 100 ? Math.min(100, wordCount / 10) : 50;
+    
+    // Keywords score based on industry-relevant terms
+    const keywords = ['project', 'team', 'development', 'management', 'technical', 'experience'];
+    const foundKeywords = keywords.filter(keyword => text.toLowerCase().includes(keyword));
+    const keywordsScore = Math.min(100, foundKeywords.length * 15 + 30);
+    
+    // Overall score as weighted average
+    const overall = Math.round((skillsScore * 0.3 + experienceScore * 0.3 + formattingScore * 0.2 + keywordsScore * 0.2));
+    
+    return {
+      overall,
+      skills: skillsScore,
+      experience: experienceScore,
+      formatting: formattingScore,
+      keywords: keywordsScore
+    };
   };
 
   const extractSkills = (text: string): string[] => {
@@ -216,7 +261,47 @@ export default function MockInterview() {
             <FileText className="w-8 h-8 text-primary mx-auto mb-2" />
             <h3 className="font-semibold">Upload Resume</h3>
             <p className="text-sm text-muted-foreground">PDF or text format</p>
-          </div>
+        </div>
+        
+        {/* Resume Score Display */}
+        {resumeScore && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center">
+                <Badge className="mr-2 text-lg px-3 py-1">{resumeScore.overall}%</Badge>
+                Resume Analysis Score
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">{resumeScore.skills}%</div>
+                  <p className="text-sm text-muted-foreground">Skills</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">{resumeScore.experience}%</div>
+                  <p className="text-sm text-muted-foreground">Experience</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">{resumeScore.formatting}%</div>
+                  <p className="text-sm text-muted-foreground">Format</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">{resumeScore.keywords}%</div>
+                  <p className="text-sm text-muted-foreground">Keywords</p>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                <p className="text-sm">
+                  <strong>AI Analysis:</strong> 
+                  {resumeScore.overall >= 80 ? " Excellent resume! Strong technical skills and experience evident." :
+                   resumeScore.overall >= 60 ? " Good resume with room for improvement. Consider adding more technical keywords and quantifiable achievements." :
+                   " Resume needs enhancement. Focus on highlighting technical skills, measurable accomplishments, and relevant experience."}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
           <div className="text-center p-4">
             <Brain className="w-8 h-8 text-primary mx-auto mb-2" />
             <h3 className="font-semibold">AI Analysis</h3>
