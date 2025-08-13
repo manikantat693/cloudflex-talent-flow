@@ -220,7 +220,7 @@ export const ServicesSection = () => {
                 variant="outline" 
                 size="lg"
                 className="text-sm sm:text-base"
-                onClick={() => setIsMockInterviewModalOpen(true)}
+                onClick={() => window.open('/mock-interview', '_blank')}
               >
                 <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <span className="hidden sm:inline">AI Mock Interview</span>
