@@ -82,21 +82,21 @@ export const JobsSection = () => {
     },
     {
       id: '4',
-      title: 'Cloud Architect',
-      company: 'Enterprise Cloud Co',
-      location: 'Dallas, TX / Remote',
+      title: 'AI/ML Engineer',
+      company: 'AI Innovation Labs',
+      location: 'San Francisco, CA / Remote',
       type: 'Full-time',
-      salary: '$140K - $190K',
-      experience: '6-10 years',
-      skills: ['AWS', 'Azure', 'Microservices', 'Serverless', 'Security', 'Architecture'],
-      description: 'Design and implement scalable cloud solutions for enterprise clients.',
+      salary: '$150K - $220K',
+      experience: '4-8 years',
+      skills: ['Python', 'TensorFlow', 'PyTorch', 'MLOps', 'LangChain', 'OpenAI API'],
+      description: 'Build and deploy cutting-edge AI models and systems for enterprise applications.',
       requirements: [
-        '6+ years of cloud architecture experience',
-        'Multiple cloud platform certifications',
-        'Microservices architecture design',
-        'Security best practices',
-        'Cost optimization strategies',
-        'Team leadership experience'
+        '4+ years of ML/AI engineering experience',
+        'Strong Python and ML framework knowledge',
+        'Experience with LLMs and prompt engineering',
+        'MLOps and model deployment expertise',
+        'Cloud ML platforms (AWS SageMaker, GCP AI)',
+        'Strong problem-solving and research skills'
       ]
     },
     {

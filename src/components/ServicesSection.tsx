@@ -76,10 +76,17 @@ export const ServicesSection = () => {
       description: 'Complete immigration assistance for international talent placement and visa processing.',
       features: ['H1B Processing', 'Green Card Support', 'Visa Documentation', 'Legal Compliance'],
       category: 'Immigration'
+    },
+    {
+      icon: Zap,
+      title: 'AI Training & Certification',
+      description: 'Comprehensive AI training programs with hands-on experience in latest technologies.',
+      features: ['LangChain Mastery', 'OpenAI API Integration', 'MLOps Training', 'Certification Support'],
+      category: 'AI Training'
     }
   ];
 
-  const categories = ['All', 'AI Services', 'Recruitment', 'Technology', 'Security', 'Development', 'Analytics', 'Immigration'];
+  const categories = ['All', 'AI Services', 'Recruitment', 'Technology', 'Security', 'Development', 'Analytics', 'Immigration', 'AI Training'];
 
   const filteredServices = selectedCategory === 'All' 
     ? services 

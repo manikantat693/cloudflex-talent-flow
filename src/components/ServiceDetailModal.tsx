@@ -9,6 +9,9 @@ import {
   Brain, Users, FileSearch, Cloud, Shield, Code, Database, BarChart3,
   CheckCircle, Star, ArrowRight, Zap, Target, Clock, Award
 } from 'lucide-react';
+import { ContactFormModal } from './ContactFormModal';
+import { ImmigrationNewsModal } from './ImmigrationNewsModal';
+import { AITrainingModal } from './AITrainingModal';
 
 interface ServiceDetailModalProps {
   isOpen: boolean;
@@ -18,6 +21,10 @@ interface ServiceDetailModalProps {
 
 export const ServiceDetailModal = ({ isOpen, onClose, category }: ServiceDetailModalProps) => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [contactType, setContactType] = useState<'get-started' | 'consultation'>('get-started');
+  const [immigrationNewsOpen, setImmigrationNewsOpen] = useState(false);
+  const [aiTrainingOpen, setAiTrainingOpen] = useState(false);
 
   const serviceDetails = {
     'AI Services': {
@@ -208,6 +215,33 @@ export const ServiceDetailModal = ({ isOpen, onClose, category }: ServiceDetailM
         solution: 'Complete immigration strategy and execution',
         result: 'Green Card approved in 18 months'
       }
+    },
+    'AI Training': {
+      icon: Zap,
+      title: 'AI Training & Certification',
+      description: 'Comprehensive AI training programs for future-ready professionals.',
+      color: 'text-violet-500',
+      services: [
+        {
+          name: 'LangChain Mastery Program',
+          description: 'Complete LangChain training with hands-on projects',
+          features: ['LangChain Fundamentals', 'Advanced Chains', 'Agent Development', 'Production Deployment'],
+          price: 'Starting at $299'
+        },
+        {
+          name: 'OpenAI API Certification',
+          description: 'Master OpenAI APIs and GPT integration',
+          features: ['API Integration', 'Fine-tuning', 'Function Calling', 'Best Practices'],
+          price: 'Starting at $199'
+        }
+      ],
+      benefits: ['Industry-recognized certification', 'Hands-on learning with real projects', 'Job placement assistance'],
+      caseStudy: {
+        client: 'Software Developer',
+        challenge: 'Transition from traditional development to AI engineering',
+        solution: 'Complete AI training bootcamp with mentorship',
+        result: 'Landed AI Engineer role with 40% salary increase'
+      }
     }
   };
 
@@ -343,15 +377,57 @@ export const ServiceDetailModal = ({ isOpen, onClose, category }: ServiceDetailM
         </Tabs>
 
         <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-          <Button variant="gradient" size="lg" className="flex-1">
+          <Button 
+            variant="gradient" 
+            size="lg" 
+            className="flex-1"
+            onClick={() => {
+              if (category === 'Immigration') {
+                setImmigrationNewsOpen(true);
+              } else if (category === 'AI Training') {
+                setAiTrainingOpen(true);
+              } else {
+                setContactType('get-started');
+                setContactModalOpen(true);
+              }
+            }}
+          >
             <Zap className="w-4 h-4 mr-2" />
-            Get Started Today
+            {category === 'Immigration' ? 'View Latest News' : 
+             category === 'AI Training' ? 'Start Learning' : 'Get Started Today'}
           </Button>
-          <Button variant="outline" size="lg" className="flex-1">
+          <Button 
+            variant="outline" 
+            size="lg" 
+            className="flex-1"
+            onClick={() => {
+              setContactType('consultation');
+              setContactModalOpen(true);
+            }}
+          >
             Schedule Consultation
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
+
+        {/* Contact Form Modal */}
+        <ContactFormModal
+          isOpen={contactModalOpen}
+          onClose={() => setContactModalOpen(false)}
+          type={contactType}
+        />
+
+        {/* Immigration News Modal */}
+        <ImmigrationNewsModal
+          isOpen={immigrationNewsOpen}
+          onClose={() => setImmigrationNewsOpen(false)}
+        />
+
+        {/* AI Training Modal */}
+        <AITrainingModal
+          isOpen={aiTrainingOpen}
+          onClose={() => setAiTrainingOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );
