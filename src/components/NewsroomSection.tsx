@@ -33,67 +33,87 @@ export const NewsroomSection = () => {
       // Simulate fetching from multiple immigration news sources
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Mock AI-processed immigration news
+      // Mock AI-processed immigration news with latest updates
       const mockNews: NewsItem[] = [
         {
           id: '1',
-          title: 'USCIS Announces Major Changes to H-1B Lottery System for 2025',
-          summary: 'New beneficiary-centric selection process aims to reduce multiple registrations and increase fairness in the H-1B allocation system.',
-          content: 'The U.S. Citizenship and Immigration Services (USCIS) has implemented significant reforms to the H-1B lottery system for fiscal year 2025. The new beneficiary-centric approach will ensure that each individual can only be selected once, regardless of how many petitions are filed on their behalf. This change is expected to increase the chances for unique beneficiaries and reduce the advantage that multiple filings previously provided.',
+          title: 'USCIS Processes Over 100K H-1B Applications This Week',
+          summary: 'Record-breaking week as USCIS approves 100,000+ H-1B petitions amid surge in tech sector demand.',
+          content: 'In an unprecedented week, USCIS has processed over 100,000 H-1B visa applications, marking the highest single-week processing volume in 2024. This surge comes as tech companies ramp up hiring for AI and machine learning positions. The agency attributes this efficiency to new automated review systems and increased staffing.',
           category: 'H-1B Visa',
           priority: 'high',
-          publishedAt: '2024-01-20',
-          sourceUrl: 'https://uscis.gov/h1b-updates-2025',
+          publishedAt: '2024-09-18',
+          sourceUrl: 'https://uscis.gov/h1b-weekly-update',
           aiProcessed: true
         },
         {
           id: '2',
-          title: 'Green Card Processing Times Show Significant Improvement',
-          summary: 'Employment-based green card applications are now being processed 30% faster due to USCIS efficiency initiatives.',
-          content: 'Recent data from USCIS shows that employment-based green card processing times have improved significantly across all categories. The EB-1 category now processes in an average of 8 months, while EB-2 and EB-3 categories have seen reductions to 12 and 18 months respectively. This improvement is attributed to increased staffing and streamlined review processes.',
+          title: 'Emergency Green Card Updates: October 2024 Bulletin Released',
+          summary: 'Visa Bulletin shows significant advancement for EB-2 India and China categories with unexpected priority date movements.',
+          content: 'The October 2024 Visa Bulletin brings welcome news for employment-based green card applicants. EB-2 India has moved forward by 8 months to March 2015, while EB-2 China advanced to February 2019. This unexpected progression is attributed to improved processing efficiency and reduced case backlogs.',
           category: 'Green Card',
           priority: 'high',
-          publishedAt: '2024-01-18',
+          publishedAt: '2024-09-20',
           aiProcessed: true
         },
         {
           id: '3',
-          title: 'New STEM OPT Eligibility Criteria Released',
-          summary: 'Updated list of STEM fields and simplified application process announced for international students.',
-          content: 'The Department of Homeland Security has expanded the list of eligible STEM fields for Optional Practical Training (OPT) extensions. The new criteria include emerging fields in artificial intelligence, cybersecurity, and renewable energy. Additionally, the application process has been simplified with digital submissions now available.',
-          category: 'Student Visa',
-          priority: 'medium',
-          publishedAt: '2024-01-15',
+          title: 'Breaking: USCIS Announces New AI-Powered Case Processing System',
+          summary: 'Revolutionary AI system reduces immigration case processing times by 40% across all categories.',
+          content: 'USCIS unveiled its new artificial intelligence-powered case management system that promises to reduce processing times by up to 40%. The system uses machine learning to prioritize cases, detect fraud, and streamline adjudication processes. Initial testing shows remarkable improvements in efficiency.',
+          category: 'Technology',
+          priority: 'high',
+          publishedAt: '2024-09-19',
           aiProcessed: true
         },
         {
           id: '4',
-          title: 'Immigration Medical Exam Requirements Updated',
-          summary: 'New health screening protocols and authorized medical centers list updated for all immigration applicants.',
-          content: 'USCIS has updated the medical examination requirements for immigration applications. The new protocols include enhanced screening for certain conditions and an updated list of authorized civil surgeons. Applicants are advised to check the latest requirements before scheduling their medical examinations.',
-          category: 'General',
+          title: 'OPT Extensions Surge 300% for AI/ML Graduates',
+          summary: 'Massive increase in STEM OPT extensions as AI graduates find unprecedented job opportunities.',
+          content: 'The latest data reveals a 300% surge in STEM OPT extension applications from AI and machine learning graduates. Universities report that 95% of their AI program graduates have secured employment before graduation, driving the highest OPT extension rates in history.',
+          category: 'Student Visa',
           priority: 'medium',
-          publishedAt: '2024-01-12',
+          publishedAt: '2024-09-17',
           aiProcessed: true
         },
         {
           id: '5',
-          title: 'Premium Processing Service Expanded to More Petition Types',
-          summary: 'USCIS expands 15-day premium processing to additional form types, reducing wait times for urgent cases.',
-          content: 'The premium processing service is now available for additional petition types including certain family-based applications and employment authorization documents. This expansion allows applicants to receive decisions within 15 calendar days for an additional fee, providing faster resolution for time-sensitive cases.',
+          title: 'Urgent: New I-94 Digital Processing Goes Live This Week',
+          summary: 'All I-94 records now processed digitally with instant updates and enhanced security features.',
+          content: 'Starting this week, all I-94 arrival/departure records are processed through the new digital system. Travelers can now access their records instantly online, with automatic status updates and enhanced security features. The old paper-based system has been completely phased out.',
           category: 'Processing',
-          priority: 'low',
-          publishedAt: '2024-01-10',
+          priority: 'medium',
+          publishedAt: '2024-09-16',
           aiProcessed: true
         },
         {
           id: '6',
-          title: 'Digital Immigration Services Portal Launches',
-          summary: 'New online platform streamlines application filing and case tracking for all immigration services.',
-          content: 'USCIS has launched a comprehensive digital portal that allows applicants to file forms, track case status, and communicate with officers online. The platform features enhanced security, real-time updates, and integrated payment processing, making the immigration process more accessible and efficient.',
-          category: 'Technology',
+          title: 'Immigration Court Backlog Reduced by 25% Through New Initiatives',
+          summary: 'Comprehensive reform and digital filing systems help immigration courts clear 250,000 pending cases.',
+          content: 'Immigration courts have successfully reduced the case backlog by 25% this quarter through new digital filing systems, expanded video hearings, and streamlined procedures. Over 250,000 pending cases have been resolved, bringing relief to hundreds of thousands of immigrants.',
+          category: 'General',
           priority: 'medium',
-          publishedAt: '2024-01-08',
+          publishedAt: '2024-09-15',
+          aiProcessed: true
+        },
+        {
+          id: '7',
+          title: 'Labor Certification Processing Time Drops to 6 Months',
+          summary: 'Department of Labor announces fastest PERM processing times in over a decade.',
+          content: 'The Department of Labor has achieved a milestone by reducing PERM labor certification processing times to just 6 months on average. This represents the fastest processing times in over a decade, significantly accelerating the green card process for employment-based applicants.',
+          category: 'Green Card',
+          priority: 'high',
+          publishedAt: '2024-09-14',
+          aiProcessed: true
+        },
+        {
+          id: '8',
+          title: 'New Premium Processing for I-485 Applications Announced',
+          summary: 'USCIS introduces 45-day premium processing for adjustment of status applications.',
+          content: 'In a major announcement, USCIS will begin offering premium processing for I-485 adjustment of status applications starting October 1, 2024. For an additional fee of $2,805, applicants can receive decisions within 45 calendar days, dramatically reducing wait times for green card applications.',
+          category: 'Processing',
+          priority: 'high',
+          publishedAt: '2024-09-21',
           aiProcessed: true
         }
       ];
