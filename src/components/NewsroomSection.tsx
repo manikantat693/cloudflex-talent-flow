@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Newspaper, Clock, ExternalLink, TrendingUp, AlertCircle, Settings, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { FirecrawlService, NewsItem } from '@/utils/FirecrawlService';
-import { FirecrawlApiKeyModal } from './FirecrawlApiKeyModal';
+import { NewsService, NewsItem } from '@/utils/FirecrawlService';
 
 interface NewsItemLocal {
   id: string;
@@ -29,7 +28,7 @@ export const NewsroomSection = () => {
 
   useEffect(() => {
     // Setup daily news updates
-    FirecrawlService.setupDailyNewsUpdate();
+    NewsService.setupDailyNewsUpdate();
     
     // Listen for news updates
     const handleNewsUpdate = (event: CustomEvent) => {
@@ -42,7 +41,7 @@ export const NewsroomSection = () => {
     window.addEventListener('newsUpdated', handleNewsUpdate as EventListener);
     
     // Load cached news if available
-    const cachedNews = FirecrawlService.getCachedNews();
+    const cachedNews = NewsService.getCachedNews();
     if (cachedNews.length > 0) {
       setNews(cachedNews);
       setUseLiveData(true);
@@ -58,18 +57,16 @@ export const NewsroomSection = () => {
   const fetchLatestNews = async () => {
     setLoading(true);
     try {
-      // Check if Firecrawl API is configured and try to fetch live data
-      if (FirecrawlService.getApiKey()) {
-        const result = await FirecrawlService.fetchUSCISNews();
-        if (result.success && result.news) {
-          setNews(result.news);
-          setUseLiveData(true);
-          toast({
-            title: "Live News Updated",
-            description: "Latest immigration news fetched from USCIS directly."
-          });
-          return;
-        }
+      // Try to fetch live USCIS news
+      const result = await NewsService.fetchUSCISNews();
+      if (result.success && result.news) {
+        setNews(result.news);
+        setUseLiveData(true);
+        toast({
+          title: "Live News Updated",
+          description: "Latest immigration news fetched and processed by AI."
+        });
+        return;
       }
       
       // Fallback to mock data
@@ -164,7 +161,7 @@ export const NewsroomSection = () => {
       if (!useLiveData) {
         toast({
           title: "Mock News Loaded",
-          description: "Sample immigration news loaded. Configure Firecrawl API for live updates."
+          description: "Sample immigration news loaded. Refresh to get latest updates."
         });
       }
     } catch (error) {
@@ -237,17 +234,20 @@ export const NewsroomSection = () => {
               )}
             </div>
             
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowApiModal(true)}
-                className="flex items-center gap-2"
-              >
-                <Settings className="w-4 h-4" />
-                {FirecrawlService.getApiKey() ? 'Manage API' : 'Setup Live News'}
-              </Button>
-            </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                NewsService.clearCache();
+                fetchLatestNews();
+              }}
+              className="flex items-center gap-2"
+            >
+              <Settings className="w-4 h-4" />
+              Refresh Live News
+            </Button>
+          </div>
           </div>
 
           {/* Category Filter */}
@@ -353,14 +353,6 @@ export const NewsroomSection = () => {
           </div>
         </div>
       </section>
-
-      <FirecrawlApiKeyModal 
-        isOpen={showApiModal}
-        onClose={() => setShowApiModal(false)}
-        onSuccess={() => {
-          fetchLatestNews();
-        }}
-      />
     </>
   );
 };
