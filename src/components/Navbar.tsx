@@ -68,6 +68,12 @@ export const Navbar = () => {
               Careers
             </button>
             <button 
+              onClick={() => scrollToSection('newsroom')}
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              Newsroom
+            </button>
+            <button 
               onClick={() => scrollToSection('contact')}
               className="text-foreground hover:text-primary transition-colors"
             >
@@ -130,6 +136,12 @@ export const Navbar = () => {
                 className="text-left text-foreground hover:text-primary transition-colors py-2"
               >
                 Careers
+              </button>
+              <button 
+                onClick={() => scrollToSection('newsroom')}
+                className="text-left text-foreground hover:text-primary transition-colors py-2"
+              >
+                Newsroom
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}
