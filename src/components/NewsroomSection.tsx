@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Newspaper, Clock, ExternalLink, TrendingUp, AlertCircle } from 'lucide-react';
+import { Newspaper, Clock, ExternalLink, TrendingUp, AlertCircle, Settings, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { FirecrawlService, NewsItem } from '@/utils/FirecrawlService';
+import { FirecrawlApiKeyModal } from './FirecrawlApiKeyModal';
 
-interface NewsItem {
+interface NewsItemLocal {
   id: string;
   title: string;
   summary: string;
@@ -19,22 +21,62 @@ interface NewsItem {
 
 export const NewsroomSection = () => {
   const { toast } = useToast();
-  const [news, setNews] = useState<NewsItem[]>([]);
+  const [news, setNews] = useState<NewsItemLocal[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showApiModal, setShowApiModal] = useState(false);
+  const [useLiveData, setUseLiveData] = useState(false);
 
   useEffect(() => {
-    fetchLatestNews();
+    // Setup daily news updates
+    FirecrawlService.setupDailyNewsUpdate();
+    
+    // Listen for news updates
+    const handleNewsUpdate = (event: CustomEvent) => {
+      if (event.detail.news) {
+        setNews(event.detail.news);
+        setUseLiveData(true);
+      }
+    };
+    
+    window.addEventListener('newsUpdated', handleNewsUpdate as EventListener);
+    
+    // Load cached news if available
+    const cachedNews = FirecrawlService.getCachedNews();
+    if (cachedNews.length > 0) {
+      setNews(cachedNews);
+      setUseLiveData(true);
+    } else {
+      fetchLatestNews();
+    }
+    
+    return () => {
+      window.removeEventListener('newsUpdated', handleNewsUpdate as EventListener);
+    };
   }, []);
 
   const fetchLatestNews = async () => {
     setLoading(true);
     try {
-      // Simulate fetching from multiple immigration news sources
+      // Check if Firecrawl API is configured and try to fetch live data
+      if (FirecrawlService.getApiKey()) {
+        const result = await FirecrawlService.fetchUSCISNews();
+        if (result.success && result.news) {
+          setNews(result.news);
+          setUseLiveData(true);
+          toast({
+            title: "Live News Updated",
+            description: "Latest immigration news fetched from USCIS directly."
+          });
+          return;
+        }
+      }
+      
+      // Fallback to mock data
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Mock AI-processed immigration news with latest updates
-      const mockNews: NewsItem[] = [
+      const mockNews: NewsItemLocal[] = [
         {
           id: '1',
           title: 'BREAKING: New $100,000 Fee Required for H-1B Petitions Starting Sept 21, 2025',
@@ -119,10 +161,12 @@ export const NewsroomSection = () => {
       ];
 
       setNews(mockNews);
-      toast({
-        title: "News Updated",
-        description: "Latest immigration news has been fetched and processed by AI."
-      });
+      if (!useLiveData) {
+        toast({
+          title: "Mock News Loaded",
+          description: "Sample immigration news loaded. Configure Firecrawl API for live updates."
+        });
+      }
     } catch (error) {
       toast({
         title: "Error",
@@ -159,121 +203,164 @@ export const NewsroomSection = () => {
   };
 
   return (
-    <section id="newsroom" className="py-20 bg-gradient-to-br from-background via-muted/30 to-background">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center mb-6">
-            <div className="p-3 bg-primary/10 rounded-full">
-              <Newspaper className="w-8 h-8 text-primary" />
+    <>
+      <section id="newsroom" className="py-20 bg-gradient-to-br from-background via-muted/30 to-background">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center mb-6">
+              <div className="p-3 bg-primary/10 rounded-full">
+                <Newspaper className="w-8 h-8 text-primary" />
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+              Immigration Newsroom
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Stay informed with the latest immigration news, policy changes, and updates. 
+              Our AI processes news from multiple sources to bring you accurate, timely information.
+            </p>
+          </div>
+
+          {/* Live Data Status and Controls */}
+          <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
+            <div className="flex items-center gap-4">
+              {useLiveData ? (
+                <Badge variant="default" className="flex items-center gap-2">
+                  <Zap className="w-4 h-4" />
+                  Live USCIS Data
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Sample Data
+                </Badge>
+              )}
+            </div>
+            
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowApiModal(true)}
+                className="flex items-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                {FirecrawlService.getApiKey() ? 'Manage API' : 'Setup Live News'}
+              </Button>
             </div>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-            Immigration Newsroom
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Stay informed with the latest immigration news, policy changes, and updates. 
-            Our AI processes news from multiple sources to bring you accurate, timely information.
-          </p>
-        </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(category)}
-              className="capitalize"
-            >
-              {category === 'all' ? 'All News' : category}
-            </Button>
-          ))}
-        </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <span className="ml-4 text-lg">Processing latest immigration news with AI...</span>
-          </div>
-        )}
-
-        {/* News Grid */}
-        {!loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredNews.map((item) => (
-              <Card key={item.id} className="hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={getPriorityColor(item.priority)}>
-                        {getPriorityIcon(item.priority)}
-                        <span className="ml-1 capitalize">{item.priority}</span>
-                      </Badge>
-                      {item.aiProcessed && (
-                        <Badge variant="secondary" className="text-xs">
-                          AI Processed
-                        </Badge>
-                      )}
-                    </div>
-                    <Badge variant="outline">{item.category}</Badge>
-                  </div>
-                  <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors">
-                    {item.title}
-                  </CardTitle>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {new Date(item.publishedAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    {item.summary}
-                  </p>
-                  <div className="space-y-3">
-                    <p className="text-sm leading-relaxed">
-                      {item.content.substring(0, 150)}...
-                    </p>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">
-                        Read More
-                      </Button>
-                      {item.sourceUrl && (
-                        <Button variant="ghost" size="sm" asChild>
-                          <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+          {/* Category Filter */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedCategory(category)}
+                className="capitalize"
+              >
+                {category === 'all' ? 'All News' : category}
+              </Button>
             ))}
           </div>
-        )}
 
-        {/* Refresh Button */}
-        <div className="text-center mt-12">
-          <Button onClick={fetchLatestNews} variant="outline" disabled={loading}>
-            <Newspaper className="w-4 h-4 mr-2" />
-            Refresh News Feed
-          </Button>
-        </div>
+          {/* Loading State */}
+          {loading && (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <span className="ml-4 text-lg">Processing latest immigration news with AI...</span>
+            </div>
+          )}
 
-        {/* AI Disclaimer */}
-        <div className="text-center mt-8 p-4 bg-muted/50 rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            <strong>AI-Powered News:</strong> Our system fetches news from multiple immigration sources and processes them with AI to provide accurate summaries and insights. 
-            Always verify critical information with official sources.
-          </p>
+          {/* News Grid */}
+          {!loading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredNews.map((item) => (
+                <Card key={item.id} className="hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className={getPriorityColor(item.priority)}>
+                          {getPriorityIcon(item.priority)}
+                          <span className="ml-1 capitalize">{item.priority}</span>
+                        </Badge>
+                        {item.aiProcessed && (
+                          <Badge variant="secondary" className="text-xs">
+                            AI Processed
+                          </Badge>
+                        )}
+                      </div>
+                      <Badge variant="outline">{item.category}</Badge>
+                    </div>
+                    <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors">
+                      {item.title}
+                    </CardTitle>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Clock className="w-4 h-4 mr-1" />
+                      {new Date(item.publishedAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4 leading-relaxed">
+                      {item.summary}
+                    </p>
+                    <div className="space-y-3">
+                      <p className="text-sm leading-relaxed">
+                        {item.content.substring(0, 150)}...
+                      </p>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className="flex-1">
+                          Read More
+                        </Button>
+                        {item.sourceUrl && (
+                          <Button variant="ghost" size="sm" asChild>
+                            <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {/* Refresh Button */}
+          <div className="text-center mt-12">
+            <Button onClick={fetchLatestNews} variant="outline" disabled={loading}>
+              <Newspaper className="w-4 h-4 mr-2" />
+              Refresh News Feed
+            </Button>
+          </div>
+
+          {/* AI Disclaimer */}
+          <div className="text-center mt-8 p-4 bg-muted/50 rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              <strong>{useLiveData ? 'Live USCIS Data:' : 'AI-Powered News:'}</strong> 
+              {useLiveData 
+                ? ' Real-time data fetched from USCIS.gov and processed with AI for accurate summaries and insights.'
+                : ' Our system fetches news from multiple immigration sources and processes them with AI to provide accurate summaries and insights.'
+              }
+              {' '}Always verify critical information with official sources.
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <FirecrawlApiKeyModal 
+        isOpen={showApiModal}
+        onClose={() => setShowApiModal(false)}
+        onSuccess={() => {
+          fetchLatestNews();
+        }}
+      />
+    </>
   );
 };
