@@ -42,18 +42,18 @@ export const NewsroomSection = () => {
           content: 'In an unprecedented week, USCIS has processed over 100,000 H-1B visa applications, marking the highest single-week processing volume in 2024. This surge comes as tech companies ramp up hiring for AI and machine learning positions. The agency attributes this efficiency to new automated review systems and increased staffing.',
           category: 'H-1B Visa',
           priority: 'high',
-          publishedAt: '2024-09-18',
+          publishedAt: '2025-01-15',
           sourceUrl: 'https://uscis.gov/h1b-weekly-update',
           aiProcessed: true
         },
         {
           id: '2',
-          title: 'Emergency Green Card Updates: October 2024 Bulletin Released',
+          title: 'Emergency Green Card Updates: February 2025 Bulletin Released',
           summary: 'Visa Bulletin shows significant advancement for EB-2 India and China categories with unexpected priority date movements.',
-          content: 'The October 2024 Visa Bulletin brings welcome news for employment-based green card applicants. EB-2 India has moved forward by 8 months to March 2015, while EB-2 China advanced to February 2019. This unexpected progression is attributed to improved processing efficiency and reduced case backlogs.',
+          content: 'The February 2025 Visa Bulletin brings welcome news for employment-based green card applicants. EB-2 India has moved forward by 8 months to March 2015, while EB-2 China advanced to February 2019. This unexpected progression is attributed to improved processing efficiency and reduced case backlogs.',
           category: 'Green Card',
           priority: 'high',
-          publishedAt: '2024-09-20',
+          publishedAt: '2025-01-18',
           aiProcessed: true
         },
         {
@@ -63,7 +63,7 @@ export const NewsroomSection = () => {
           content: 'USCIS unveiled its new artificial intelligence-powered case management system that promises to reduce processing times by up to 40%. The system uses machine learning to prioritize cases, detect fraud, and streamline adjudication processes. Initial testing shows remarkable improvements in efficiency.',
           category: 'Technology',
           priority: 'high',
-          publishedAt: '2024-09-19',
+          publishedAt: '2025-01-16',
           aiProcessed: true
         },
         {
@@ -73,7 +73,7 @@ export const NewsroomSection = () => {
           content: 'The latest data reveals a 300% surge in STEM OPT extension applications from AI and machine learning graduates. Universities report that 95% of their AI program graduates have secured employment before graduation, driving the highest OPT extension rates in history.',
           category: 'Student Visa',
           priority: 'medium',
-          publishedAt: '2024-09-17',
+          publishedAt: '2025-01-12',
           aiProcessed: true
         },
         {
@@ -83,7 +83,7 @@ export const NewsroomSection = () => {
           content: 'Starting this week, all I-94 arrival/departure records are processed through the new digital system. Travelers can now access their records instantly online, with automatic status updates and enhanced security features. The old paper-based system has been completely phased out.',
           category: 'Processing',
           priority: 'medium',
-          publishedAt: '2024-09-16',
+          publishedAt: '2025-01-10',
           aiProcessed: true
         },
         {
@@ -93,7 +93,7 @@ export const NewsroomSection = () => {
           content: 'Immigration courts have successfully reduced the case backlog by 25% this quarter through new digital filing systems, expanded video hearings, and streamlined procedures. Over 250,000 pending cases have been resolved, bringing relief to hundreds of thousands of immigrants.',
           category: 'General',
           priority: 'medium',
-          publishedAt: '2024-09-15',
+          publishedAt: '2025-01-08',
           aiProcessed: true
         },
         {
@@ -103,17 +103,17 @@ export const NewsroomSection = () => {
           content: 'The Department of Labor has achieved a milestone by reducing PERM labor certification processing times to just 6 months on average. This represents the fastest processing times in over a decade, significantly accelerating the green card process for employment-based applicants.',
           category: 'Green Card',
           priority: 'high',
-          publishedAt: '2024-09-14',
+          publishedAt: '2025-01-05',
           aiProcessed: true
         },
         {
           id: '8',
           title: 'New Premium Processing for I-485 Applications Announced',
           summary: 'USCIS introduces 45-day premium processing for adjustment of status applications.',
-          content: 'In a major announcement, USCIS will begin offering premium processing for I-485 adjustment of status applications starting October 1, 2024. For an additional fee of $2,805, applicants can receive decisions within 45 calendar days, dramatically reducing wait times for green card applications.',
+          content: 'In a major announcement, USCIS will begin offering premium processing for I-485 adjustment of status applications starting February 1, 2025. For an additional fee of $2,805, applicants can receive decisions within 45 calendar days, dramatically reducing wait times for green card applications.',
           category: 'Processing',
           priority: 'high',
-          publishedAt: '2024-09-21',
+          publishedAt: '2025-01-20',
           aiProcessed: true
         }
       ];
