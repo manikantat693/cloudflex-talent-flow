@@ -37,23 +37,23 @@ export const NewsroomSection = () => {
       const mockNews: NewsItem[] = [
         {
           id: '1',
-          title: 'USCIS Processes Over 100K H-1B Applications This Week',
-          summary: 'Record-breaking week as USCIS approves 100,000+ H-1B petitions amid surge in tech sector demand.',
-          content: 'In an unprecedented week, USCIS has processed over 100,000 H-1B visa applications, marking the highest single-week processing volume in 2024. This surge comes as tech companies ramp up hiring for AI and machine learning positions. The agency attributes this efficiency to new automated review systems and increased staffing.',
+          title: 'BREAKING: New $100,000 Fee Required for H-1B Petitions Starting Sept 21, 2025',
+          summary: 'President Trump signs proclamation requiring $100,000 payment for all new H-1B visa petitions, including the 2026 lottery.',
+          content: 'On Friday, Sept. 19, 2025, President Donald J. Trump signed a Proclamation "Restriction on Entry of Certain Nonimmigrant Workers" that requires a $100,000 payment to accompany any new H-1B visa petitions submitted after 12:01 a.m. eastern daylight time on Sept. 21, 2025. This includes the 2026 lottery and any other H-1B petitions submitted after this deadline. The proclamation does not apply to previously issued H-1B visas or petitions submitted prior to the deadline.',
           category: 'H-1B Visa',
           priority: 'high',
-          publishedAt: '2025-01-15',
-          sourceUrl: 'https://uscis.gov/h1b-weekly-update',
+          publishedAt: '2025-09-21',
+          sourceUrl: 'https://www.uscis.gov/newsroom/alerts/h-1b-faq',
           aiProcessed: true
         },
         {
           id: '2',
-          title: 'Emergency Green Card Updates: February 2025 Bulletin Released',
-          summary: 'Visa Bulletin shows significant advancement for EB-2 India and China categories with unexpected priority date movements.',
-          content: 'The February 2025 Visa Bulletin brings welcome news for employment-based green card applicants. EB-2 India has moved forward by 8 months to March 2015, while EB-2 China advanced to February 2019. This unexpected progression is attributed to improved processing efficiency and reduced case backlogs.',
-          category: 'Green Card',
+          title: 'H-1B Program Reforms: Prevailing Wage Levels to be Raised',
+          summary: 'Department of Labor to revise and raise prevailing wage levels to ensure H-1B program hires only the best temporary foreign workers.',
+          content: 'As part of comprehensive H-1B program reforms, the Department of Labor will conduct rulemaking to revise and raise prevailing wage levels. This aims to upskill the H-1B program and ensure it is used to hire only the best temporary foreign workers. Additionally, DHS will prioritize high-skilled, high-paid aliens in the H-1B lottery over those at lower wage levels.',
+          category: 'H-1B Visa',
           priority: 'high',
-          publishedAt: '2025-01-18',
+          publishedAt: '2025-09-20',
           aiProcessed: true
         },
         {
