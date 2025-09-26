@@ -3,11 +3,29 @@ import { ArrowRight, Users, Award, Building } from 'lucide-react';
 
 export const HeroSection = () => {
   const scrollToJobs = () => {
-    document.getElementById('jobs')?.scrollIntoView({ behavior: 'smooth' });
+    // Expand jobs section first
+    const trigger = document.querySelector(`[data-section="jobs"]`) as HTMLButtonElement;
+    if (trigger && trigger.getAttribute('data-state') === 'closed') {
+      trigger.click();
+      setTimeout(() => {
+        document.getElementById('jobs')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    } else {
+      document.getElementById('jobs')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    // Expand contact section first
+    const trigger = document.querySelector(`[data-section="contact"]`) as HTMLButtonElement;
+    if (trigger && trigger.getAttribute('data-state') === 'closed') {
+      trigger.click();
+      setTimeout(() => {
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    } else {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
