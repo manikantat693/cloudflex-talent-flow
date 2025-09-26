@@ -20,6 +20,8 @@ export const CollapsibleSection = ({ title, id, children, defaultOpen = false }:
           <Button 
             variant="ghost" 
             className="w-full flex items-center justify-between py-8 px-6 text-left hover:bg-accent/50 rounded-none"
+            data-section={id}
+            data-state={isOpen ? 'open' : 'closed'}
           >
             <h2 className="text-2xl md:text-3xl font-space font-bold text-gradient">
               {title}

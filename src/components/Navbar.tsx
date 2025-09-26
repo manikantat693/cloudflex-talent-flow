@@ -16,7 +16,21 @@ export const Navbar = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    // For collapsible sections, expand them first
+    if (['services', 'industries', 'jobs', 'newsroom', 'contact'].includes(sectionId)) {
+      const trigger = document.querySelector(`[data-section="${sectionId}"]`) as HTMLButtonElement;
+      if (trigger && trigger.getAttribute('data-state') === 'closed') {
+        trigger.click();
+        // Wait for animation to complete before scrolling
+        setTimeout(() => {
+          document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+      } else {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    }
     setIsMobileMenuOpen(false);
   };
 
