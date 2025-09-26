@@ -101,7 +101,11 @@ export const Navbar = () => {
               <Phone size={16} />
               <span>336-281-2871</span>
             </div>
-            <Button variant="gradient" size="sm">
+            <Button 
+              variant="gradient" 
+              size="sm"
+              onClick={() => scrollToSection('jobs')}
+            >
               Get Started
             </Button>
           </div>
@@ -168,7 +172,11 @@ export const Navbar = () => {
                   <Phone size={16} />
                   <span>336-281-2871</span>
                 </div>
-                <Button variant="gradient" className="w-full">
+                <Button 
+                  variant="gradient" 
+                  className="w-full"
+                  onClick={() => scrollToSection('jobs')}
+                >
                   Get Started
                 </Button>
               </div>
