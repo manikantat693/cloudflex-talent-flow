@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Newspaper, Clock, ExternalLink, TrendingUp, AlertCircle, Settings, Zap } from 'lucide-react';
+import { Newspaper, Clock, ExternalLink, TrendingUp, AlertCircle, Settings, Zap, Key } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { NewsService, NewsItem } from '@/utils/FirecrawlService';
+import { FirecrawlSetupModal } from './FirecrawlSetupModal';
 
 interface NewsItemLocal {
   id: string;
@@ -23,10 +24,15 @@ export const NewsroomSection = () => {
   const [news, setNews] = useState<NewsItemLocal[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [showApiModal, setShowApiModal] = useState(false);
+  const [showFirecrawlSetup, setShowFirecrawlSetup] = useState(false);
   const [useLiveData, setUseLiveData] = useState(false);
+  const [hasApiKey, setHasApiKey] = useState(false);
 
   useEffect(() => {
+    // Check if API key is available
+    const apiKey = NewsService.getApiKey();
+    setHasApiKey(!!apiKey);
+    
     // Setup daily news updates
     NewsService.setupDailyNewsUpdate();
     
@@ -235,6 +241,18 @@ export const NewsroomSection = () => {
             </div>
             
           <div className="flex gap-2">
+            {!hasApiKey && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => setShowFirecrawlSetup(true)}
+                className="flex items-center gap-2"
+              >
+                <Key className="w-4 h-4" />
+                Enable Real-Time News
+              </Button>
+            )}
+            
             <Button
               variant="outline"
               size="sm"
@@ -245,7 +263,7 @@ export const NewsroomSection = () => {
               className="flex items-center gap-2"
             >
               <Settings className="w-4 h-4" />
-              Refresh Live News
+              Refresh News
             </Button>
           </div>
           </div>
@@ -353,6 +371,15 @@ export const NewsroomSection = () => {
           </div>
         </div>
       </section>
+
+      <FirecrawlSetupModal 
+        isOpen={showFirecrawlSetup}
+        onClose={() => setShowFirecrawlSetup(false)}
+        onApiKeySet={() => {
+          setHasApiKey(true);
+          fetchLatestNews();
+        }}
+      />
     </>
   );
 };
