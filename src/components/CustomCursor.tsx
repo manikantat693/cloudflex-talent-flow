@@ -2,26 +2,25 @@ import { useEffect, useState } from 'react';
 
 export const CustomCursor = () => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [followerPosition, setFollowerPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
 
   useEffect(() => {
     const updateCursorPosition = (e: MouseEvent) => {
       setCursorPosition({ x: e.clientX, y: e.clientY });
-      
-      // Smooth follower animation
-      setTimeout(() => {
-        setFollowerPosition({ x: e.clientX, y: e.clientY });
-      }, 100);
     };
 
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
+    const handleMouseDown = () => setIsClicking(true);
+    const handleMouseUp = () => setIsClicking(false);
 
     // Add event listeners for interactive elements
-    const interactiveElements = document.querySelectorAll('button, a, [role="button"]');
+    const interactiveElements = document.querySelectorAll('button, a, [role="button"], input, textarea, select');
     
     document.addEventListener('mousemove', updateCursorPosition);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
     
     interactiveElements.forEach(el => {
       el.addEventListener('mouseenter', handleMouseEnter);
@@ -30,6 +29,8 @@ export const CustomCursor = () => {
 
     return () => {
       document.removeEventListener('mousemove', updateCursorPosition);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
       interactiveElements.forEach(el => {
         el.removeEventListener('mouseenter', handleMouseEnter);
         el.removeEventListener('mouseleave', handleMouseLeave);
@@ -38,23 +39,12 @@ export const CustomCursor = () => {
   }, []);
 
   return (
-    <>
-      <div
-        className="custom-cursor"
-        style={{
-          left: `${cursorPosition.x}px`,
-          top: `${cursorPosition.y}px`,
-          transform: isHovering ? 'scale(1.5)' : 'scale(1)',
-        }}
-      />
-      <div
-        className="custom-cursor-follower"
-        style={{
-          left: `${followerPosition.x - 20}px`,
-          top: `${followerPosition.y - 20}px`,
-          transform: isHovering ? 'scale(1.2)' : 'scale(1)',
-        }}
-      />
-    </>
+    <div
+      className={`custom-cursor ${isHovering ? 'hovering' : ''} ${isClicking ? 'clicking' : ''}`}
+      style={{
+        left: `${cursorPosition.x}px`,
+        top: `${cursorPosition.y}px`,
+      }}
+    />
   );
 };
