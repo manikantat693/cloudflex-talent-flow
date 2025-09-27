@@ -4,6 +4,7 @@ export interface ServiceInfo {
   description: string;
   features: string[];
   benefits: string[];
+  pricing?: string;
 }
 
 export interface JobInfo {
@@ -20,6 +21,16 @@ export interface CompanyInfo {
   mission: string;
   values: string[];
   specialties: string[];
+  industries: string[];
+  location: string;
+  globalReach: boolean;
+}
+
+export interface TechnicalCapability {
+  area: string;
+  description: string;
+  technologies: string[];
+  outcomes: string[];
 }
 
 export const COMPANY_INFO: CompanyInfo = {
@@ -35,30 +46,113 @@ export const COMPANY_INFO: CompanyInfo = {
     "Professional integrity"
   ],
   specialties: [
-    "IT Talent Acquisition",
-    "Immigration Services", 
-    "Resume Optimization",
-    "Career Counseling",
-    "Technical Training"
-  ]
+    "Custom App Development",
+    "AI & Automation Solutions",
+    "Cloud & DevOps Services",
+    "Data & Analytics",
+    "IT Talent Staffing",
+    "Immigration Services"
+  ],
+  industries: ["FinServ", "Healthcare", "SaaS", "Technology", "Manufacturing", "Government"],
+  location: "United States",
+  globalReach: true
 };
 
 export const SERVICES: ServiceInfo[] = [
   {
-    name: "Talent Acquisition & Placement",
-    description: "We connect skilled IT professionals with leading companies across various industries.",
+    name: "Custom App Development",
+    description: "We build scalable, secure applications using modern technologies like Java/Spring Boot, Vue/React, and cloud-native architectures.",
     features: [
-      "Full-time and contract positions",
-      "Remote and on-site opportunities", 
-      "Competitive salary negotiations",
-      "Career growth planning"
+      "Java/Spring Boot backend development",
+      "Vue/React frontend applications", 
+      "Microservices architecture",
+      "API development and integration",
+      "Database design and optimization",
+      "Cloud-native deployment"
     ],
     benefits: [
-      "Access to exclusive job opportunities",
-      "Professional career guidance",
-      "Interview preparation support",
-      "Long-term career development"
-    ]
+      "Scalable and maintainable code",
+      "Modern tech stack",
+      "99.9% uptime target",
+      "Built-in security measures"
+    ],
+    pricing: "Contact for custom quotes based on project scope"
+  },
+  {
+    name: "AI & Automation Solutions",
+    description: "AI-powered chatbots, workflow automation, and intelligent analytics to transform your business processes.",
+    features: [
+      "AI chatbots with RAG (Retrieval-Augmented Generation)",
+      "Workflow automation",
+      "Intelligent document processing",
+      "Real-time analytics and insights",
+      "Enterprise system integrations",
+      "AI guardrails and monitoring"
+    ],
+    benefits: [
+      "Improved operational efficiency",
+      "24/7 intelligent customer support",
+      "Reduced manual work",
+      "Data-driven decision making"
+    ],
+    pricing: "Starter, Growth, and Enterprise tiers available"
+  },
+  {
+    name: "Cloud & DevOps Services",
+    description: "Kubernetes deployment, CI/CD pipelines, and observability solutions for scalable cloud infrastructure.",
+    features: [
+      "Kubernetes auto-scaling and load balancing",
+      "CI/CD pipeline setup and optimization",
+      "Blue/green and canary deployments",
+      "Infrastructure as Code (IaC)",
+      "Observability (logs, metrics, tracing)",
+      "Automated rollback mechanisms"
+    ],
+    benefits: [
+      "Zero-downtime deployments",
+      "Enhanced system reliability",
+      "Faster time to market",
+      "Reduced operational costs"
+    ],
+    pricing: "Based on infrastructure size and complexity"
+  },
+  {
+    name: "Data & Analytics",
+    description: "Transform your data into actionable insights with custom dashboards, analytics, and anomaly detection.",
+    features: [
+      "Custom dashboard development",
+      "Real-time data processing",
+      "Anomaly detection systems",
+      "Predictive analytics",
+      "Data pipeline automation",
+      "Business intelligence solutions"
+    ],
+    benefits: [
+      "Data-driven insights",
+      "Improved business outcomes",
+      "Automated reporting",
+      "Competitive advantage"
+    ],
+    pricing: "Flexible based on data volume and complexity"
+  },
+  {
+    name: "IT Talent Staffing",
+    description: "Vetted engineers for Java, frontend, DevOps, and data roles. Contract and remote positions available.",
+    features: [
+      "Multi-round technical screening",
+      "Communication & cultural fit evaluation",
+      "U.S. client experience preferred",
+      "Quick onboarding process",
+      "Replacement guarantee if needed",
+      "Contract and permanent placements"
+    ],
+    benefits: [
+      "Pre-screened, qualified candidates",
+      "Reduced hiring time",
+      "Cultural fit assurance",
+      "Ongoing support"
+    ],
+    pricing: "No fees for candidates - paid by client companies"
   },
   {
     name: "Immigration Support Services", 
@@ -68,46 +162,15 @@ export const SERVICES: ServiceInfo[] = [
       "L1 visa assistance",
       "OPT and STEM OPT guidance",
       "Green Card processing",
-      "Document preparation"
+      "Document preparation and review"
     ],
     benefits: [
       "Expert legal guidance",
       "Streamlined application process",
       "Regular status updates",
       "High success rate"
-    ]
-  },
-  {
-    name: "Resume Review & Optimization",
-    description: "Professional resume enhancement to maximize your job prospects.",
-    features: [
-      "ATS-friendly formatting",
-      "Keyword optimization",
-      "Skills highlighting",
-      "Industry-specific customization"
     ],
-    benefits: [
-      "Increased interview callbacks",
-      "Better job matching",
-      "Professional presentation",
-      "Competitive advantage"
-    ]
-  },
-  {
-    name: "Career Counseling",
-    description: "Personalized career guidance and development planning.",
-    features: [
-      "Skills assessment",
-      "Career path planning",
-      "Interview coaching",
-      "Salary negotiation support"
-    ],
-    benefits: [
-      "Clear career direction",
-      "Enhanced interview performance",
-      "Better compensation packages",
-      "Professional confidence"
-    ]
+    pricing: "Varies by visa type and case complexity"
   }
 ];
 
@@ -189,6 +252,72 @@ export const CONTACT_INFO = {
   hours: "Monday - Friday, 9:00 AM - 6:00 PM EST"
 };
 
+export const TECHNICAL_CAPABILITIES: TechnicalCapability[] = [
+  {
+    area: "Scalability & Uptime",
+    description: "Enterprise-grade infrastructure designed for high availability and performance",
+    technologies: ["Kubernetes", "Load Balancers", "Auto-scaling", "Observability Tools"],
+    outcomes: ["99.9% uptime target", "Automatic scaling", "Performance monitoring", "Stress testing"]
+  },
+  {
+    area: "Legacy Migration",
+    description: "Seamless cloud migration with minimal disruption to business operations",
+    technologies: ["Java", ".NET", "Oracle", "Containerization", "CI/CD"],
+    outcomes: ["Modernized architecture", "Reduced operational costs", "Improved performance", "Enhanced security"]
+  },
+  {
+    area: "Security & Compliance",
+    description: "Enterprise security with industry-standard compliance frameworks",
+    technologies: ["SOC2", "HIPAA", "GDPR", "Secret Management", "Access Controls"],
+    outcomes: ["Regulatory compliance", "Data protection", "Risk mitigation", "Audit readiness"]
+  },
+  {
+    area: "AI Integration",
+    description: "Intelligent automation integrated with existing enterprise systems",
+    technologies: ["RAG", "API Integration", "CRM/ERP", "Real-time Analytics", "AI Guardrails"],
+    outcomes: ["Process automation", "Enhanced decision making", "Cost reduction", "ROI tracking"]
+  }
+];
+
+export const PRICING_TIERS = {
+  starter: {
+    name: "Starter",
+    description: "Perfect for pilot projects and small teams",
+    features: ["1 pilot use case", "Basic support", "Core features"],
+    pricing: "Contact for quote"
+  },
+  growth: {
+    name: "Growth", 
+    description: "Ideal for growing businesses with multiple use cases",
+    features: ["2-3 use cases", "Observability included", "Priority support", "Advanced features"],
+    pricing: "Contact for quote"
+  },
+  enterprise: {
+    name: "Enterprise",
+    description: "Comprehensive solution for large organizations",
+    features: ["Dedicated team", "SLAs included", "Security reviews", "Custom integrations", "24/7 support"],
+    pricing: "Contact for quote"
+  }
+};
+
+export const DELIVERY_PROCESS = [
+  {
+    phase: "Discover & Design",
+    description: "Assess requirements, pain points, and define solution architecture",
+    deliverables: ["Requirements analysis", "Technical design", "Project timeline"]
+  },
+  {
+    phase: "Build & Deploy", 
+    description: "Develop scalable, secure applications with modern best practices",
+    deliverables: ["Code development", "Testing", "Deployment", "Documentation"]
+  },
+  {
+    phase: "Measure & Optimize",
+    description: "Track KPIs, monitor performance, and continuously improve",
+    deliverables: ["Performance monitoring", "Analytics setup", "Optimization recommendations"]
+  }
+];
+
 export const FAQ_DATA = [
   {
     question: "How do I apply for a job?",
@@ -208,7 +337,19 @@ export const FAQ_DATA = [
   },
   {
     question: "What industries do you serve?",
-    answer: "We serve multiple industries including Technology, Healthcare, Finance, Retail, Manufacturing, Government, Consulting, and Startups, all requiring skilled IT professionals."
+    answer: "We serve multiple industries including FinServ, Healthcare, SaaS, Technology, Manufacturing, and Government, all requiring skilled IT professionals."
+  },
+  {
+    question: "Do you provide free consultations?",
+    answer: "Yes, initial consultations are free. We use them to map goals, pain points, and quick wins."
+  },
+  {
+    question: "How do you ensure scalability and uptime?",
+    answer: "We use Kubernetes auto-scaling, load balancers, stress testing for transaction spikes, and built-in observability with a target uptime of 99.9%."
+  },
+  {
+    question: "How do you handle data security & compliance?",
+    answer: "We follow SOC2-friendly patterns, HIPAA-ready for healthcare, GDPR-aligned for EU users, with strong secret management and least-privilege access."
   }
 ];
 
