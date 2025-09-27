@@ -34,12 +34,17 @@ export const ChatBot = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'end'
+      });
+    }, 100);
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const getBotResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
@@ -186,7 +191,7 @@ export const ChatBot = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 w-96 max-w-[calc(100vw-2rem)]">
-      <Card className="h-[500px] flex flex-col shadow-2xl">
+      <Card className="h-[500px] flex flex-col shadow-2xl overflow-hidden">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 bg-gradient-to-r from-primary to-accent rounded-t-2xl">
           <CardTitle className="text-lg font-semibold text-primary-foreground">
             CloudFlex AI Assistant
@@ -201,9 +206,9 @@ export const ChatBot = () => {
           </Button>
         </CardHeader>
 
-        <CardContent className="flex-1 flex flex-col p-0">
+        <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth" style={{ maxHeight: '400px' }}>
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -250,7 +255,7 @@ export const ChatBot = () => {
               </div>
             )}
             
-            <div ref={messagesEndRef} />
+            <div ref={messagesEndRef} className="h-1" />
           </div>
 
           {/* Input */}
