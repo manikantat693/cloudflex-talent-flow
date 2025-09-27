@@ -184,8 +184,13 @@ export const ChatBot = () => {
       return `📝 How to Apply:\n\n1. **Browse Opportunities**\n   Check our current job openings section\n\n2. **Submit Application**\n   Click on positions matching your skills\n   Upload resume and cover letter\n\n3. **Quick Review**\n   We review applications within 24-48 hours\n\n4. **Interview Process**\n   Qualified candidates get interview scheduling\n   Technical and cultural fit assessment\n\n💡 Pro tip: Our job placement is FREE for candidates!\n\n👉 Need help finding the right position?`;
     }
 
-    // Contact information
-    if (message.includes('contact') || message.includes('phone') || message.includes('email') || message.includes('address') || message.includes('how to reach')) {
+    // Location and address specific queries
+    if (message.includes('where') || message.includes('location') || message.includes('located') || message.includes('address') || message.includes('office')) {
+      return `📍 **CloudFlex IT Solutions Location**\n\n**Our Address:**\n${CONTACT_INFO.address}\n\n**Contact Details:**\n📧 ${CONTACT_INFO.email}\n📞 ${CONTACT_INFO.phone}\n🌐 ${CONTACT_INFO.website}\n⏰ ${CONTACT_INFO.hours}\n\nWe're based in Charlotte, NC and serve clients worldwide!\n\n👉 Want to visit or schedule a meeting?`;
+    }
+
+    // General contact information
+    if (message.includes('contact') || message.includes('phone') || message.includes('email') || message.includes('how to reach')) {
       return `📞 Contact CloudFlex IT Solutions:\n\n📧 General: ${CONTACT_INFO.email}\n📧 HR: ${CONTACT_INFO.hrEmail}\n📞 Phone: ${CONTACT_INFO.phone}\n🌐 Website: ${CONTACT_INFO.website}\n📍 Address: ${CONTACT_INFO.address}\n⏰ Hours: ${CONTACT_INFO.hours}\n\n👉 Want me to connect you now for a free consultation?`;
     }
 
