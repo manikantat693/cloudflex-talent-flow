@@ -3,6 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import { 
+  COMPANY_INFO, 
+  SERVICES, 
+  CURRENT_JOBS, 
+  CONTACT_INFO, 
+  FAQ_DATA, 
+  IMMIGRATION_INFO 
+} from '@/utils/ChatBotKnowledge';
 
 interface Message {
   id: string;
@@ -36,39 +44,92 @@ export const ChatBot = () => {
   const getBotResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
     
-    if (message.includes('job') || message.includes('career') || message.includes('position')) {
-      return "We have exciting opportunities in Java Development, DevOps, Data Science, Cloud Architecture, React Development, and Cybersecurity. Would you like me to show you our current openings or help you apply?";
+    // Company and About queries
+    if (message.includes('about') || message.includes('company') || message.includes('who are you')) {
+      return `${COMPANY_INFO.name} is ${COMPANY_INFO.tagline.toLowerCase()}. Founded in ${COMPANY_INFO.founded}, our mission is to ${COMPANY_INFO.mission.toLowerCase()}\n\nWe specialize in:\n${COMPANY_INFO.specialties.map(s => `• ${s}`).join('\n')}\n\nWould you like to know more about any specific service?`;
     }
-    
-    if (message.includes('visa') || message.includes('immigration') || message.includes('h1b') || message.includes('green card')) {
-      return "We provide comprehensive immigration support including H1B, L1, OPT, and Green Card processing. Our experienced team guides you through every step of the process. Would you like to know more about specific visa types?";
+
+    // Job-related queries
+    if (message.includes('job') || message.includes('career') || message.includes('position') || message.includes('opening')) {
+      if (message.includes('java')) {
+        const javaJob = CURRENT_JOBS.find(job => job.title.toLowerCase().includes('java'));
+        return `We have a ${javaJob?.title} position (${javaJob?.level})!\n\nKey requirements:\n${javaJob?.requirements.map(r => `• ${r}`).join('\n')}\n\nRequired skills: ${javaJob?.skills.join(', ')}\n\nInterested? I can help you apply!`;
+      }
+      if (message.includes('devops')) {
+        const devopsJob = CURRENT_JOBS.find(job => job.title.toLowerCase().includes('devops'));
+        return `Great! We have a ${devopsJob?.title} role (${devopsJob?.level}).\n\nRequirements:\n${devopsJob?.requirements.map(r => `• ${r}`).join('\n')}\n\nSkills needed: ${devopsJob?.skills.join(', ')}\n\nShall I connect you with our recruitment team?`;
+      }
+      if (message.includes('react') || message.includes('frontend')) {
+        const reactJob = CURRENT_JOBS.find(job => job.title.toLowerCase().includes('react'));
+        return `Perfect! We have a ${reactJob?.title} position (${reactJob?.level}).\n\nWhat we're looking for:\n${reactJob?.requirements.map(r => `• ${r}`).join('\n')}\n\nTech stack: ${reactJob?.skills.join(', ')}\n\nReady to apply?`;
+      }
+      
+      return `We have exciting opportunities across multiple roles:\n\n${CURRENT_JOBS.map(job => `🔹 ${job.title} (${job.level})`).join('\n')}\n\nWhich position interests you most? I can provide detailed information about requirements and application process.`;
     }
-    
+
+    // Immigration and visa queries
+    if (message.includes('visa') || message.includes('immigration') || message.includes('h1b') || message.includes('green card') || message.includes('opt')) {
+      if (message.includes('h1b')) {
+        const h1bInfo = IMMIGRATION_INFO.visaTypes.find(v => v.type === 'H1B');
+        return `H1B Visa Information:\n${h1bInfo?.description}\nDuration: ${h1bInfo?.duration}\n\nOur H1B services include:\n• Petition preparation and filing\n• Documentation support\n• Status updates throughout process\n• Renewal assistance\n\nWe have a high success rate! Would you like to schedule a consultation?`;
+      }
+      if (message.includes('green card')) {
+        const gcInfo = IMMIGRATION_INFO.visaTypes.find(v => v.type === 'Green Card');
+        return `Green Card Process:\n${gcInfo?.description}\nStatus: ${gcInfo?.duration}\n\nOur process:\n${IMMIGRATION_INFO.process.map(p => `• ${p}`).join('\n')}\n\nProcessing times vary by country and category. Want to discuss your specific situation?`;
+      }
+      
+      return `We provide comprehensive immigration support:\n\n${IMMIGRATION_INFO.visaTypes.map(v => `🔹 ${v.type}: ${v.description}`).join('\n')}\n\nOur expert team guides you through every step. Which visa type interests you?`;
+    }
+
+    // Resume and career services
     if (message.includes('resume') || message.includes('cv')) {
-      return "Our resume optimization service helps enhance your profile to maximize interview opportunities. We review your resume and provide personalized recommendations. Would you like to submit your resume for review?";
+      const resumeService = SERVICES.find(s => s.name.toLowerCase().includes('resume'));
+      return `Our Resume Optimization Service includes:\n\n${resumeService?.features.map(f => `• ${f}`).join('\n')}\n\nBenefits you'll get:\n${resumeService?.benefits.map(b => `• ${b}`).join('\n')}\n\nReady to optimize your resume for better opportunities?`;
     }
-    
-    if (message.includes('apply') || message.includes('application')) {
-      return "You can apply for our current job openings through our careers section. Simply click on any position that interests you and submit your application. We'll review it within 24-48 hours.";
+
+    // Application process
+    if (message.includes('apply') || message.includes('application') || message.includes('how to apply')) {
+      return `Here's how to apply:\n\n1. Browse our current opportunities in the jobs section\n2. Click on positions that match your skills\n3. Submit your resume and cover letter\n4. We review applications within 24-48 hours\n5. Qualified candidates receive interview scheduling\n\n💡 Tip: Our job placement services are completely FREE for candidates!\n\nNeed help finding the right position?`;
     }
-    
-    if (message.includes('contact') || message.includes('phone') || message.includes('email')) {
-      return "You can reach us at:\n📞 Phone: 336-281-2871\n📧 Email: admin@cloudflexit.com\n📧 HR: hr@cloudflexit.com\n📍 Address: 10926 David Taylor Dr., Ste 120 PMB369, Charlotte, NC 28262";
+
+    // Contact information
+    if (message.includes('contact') || message.includes('phone') || message.includes('email') || message.includes('address')) {
+      return `Contact CloudFlex IT Solutions:\n\n📞 Phone: ${CONTACT_INFO.phone}\n📧 General: ${CONTACT_INFO.email}\n📧 HR: ${CONTACT_INFO.hrEmail}\n📍 Address: ${CONTACT_INFO.address}\n🌐 Website: ${CONTACT_INFO.website}\n⏰ Hours: ${CONTACT_INFO.hours}`;
     }
-    
+
+    // Services overview
+    if (message.includes('service') || message.includes('what do you do') || message.includes('help')) {
+      return `${COMPANY_INFO.name} offers comprehensive IT solutions:\n\n${SERVICES.map(s => `🔹 ${s.name}\n   ${s.description}`).join('\n\n')}\n\nWhich service interests you most?`;
+    }
+
+    // Pricing and fees
+    if (message.includes('cost') || message.includes('price') || message.includes('fee') || message.includes('charge')) {
+      return `Great news! Our job placement services are completely FREE for candidates. We're paid by our client companies when we successfully place qualified professionals.\n\nOur other services have competitive rates:\n• Resume optimization: Contact for pricing\n• Immigration services: Varies by case complexity\n• Career counseling: Contact for details\n\nWant to discuss specific pricing for your needs?`;
+    }
+
+    // FAQ responses
+    if (message.includes('remote') || message.includes('work from home')) {
+      const faq = FAQ_DATA.find(f => f.question.toLowerCase().includes('remote'));
+      return faq?.answer || "Yes, we offer both remote and on-site positions with flexible work arrangements!";
+    }
+
+    // Industries
+    if (message.includes('industry') || message.includes('industries')) {
+      return `We serve diverse industries needing IT talent:\n\n🔹 Technology & Software\n🔹 Healthcare & Life Sciences\n🔹 Financial Services\n🔹 Retail & E-commerce\n🔹 Manufacturing\n🔹 Government & Public Sector\n🔹 Consulting\n🔹 Startups & Scale-ups\n\nWhich industry interests you most?`;
+    }
+
+    // Greetings
     if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
-      return "Hello! Welcome to CloudFlex IT Solutions. I'm here to help you with information about our services, job opportunities, and immigration support. What would you like to know?";
+      return `Hello! Welcome to ${COMPANY_INFO.name}. I'm your AI assistant, here to help with:\n\n• Job opportunities and applications\n• Immigration and visa support\n• Resume optimization\n• Career guidance\n• Company information\n\nWhat would you like to know?`;
     }
-    
+
+    // Thanks
     if (message.includes('thank') || message.includes('thanks')) {
-      return "You're welcome! I'm always here to help. If you have any other questions about our services or opportunities, feel free to ask!";
+      return "You're very welcome! I'm always here to help you advance your career. Feel free to ask about our services, job opportunities, or immigration support anytime! 😊";
     }
-    
-    if (message.includes('service') || message.includes('what do you do')) {
-      return "CloudFlex IT Solutions specializes in:\n• Talent Acquisition & Placement\n• Resume Review & Optimization\n• Immigration Support (H1B, L1, OPT, Green Card)\n• Career Counseling\n• Interview Preparation\n\nHow can we help advance your career?";
-    }
-    
-    return "I understand you're interested in learning more. For detailed information about our services or specific questions, I'd recommend contacting our team directly at admin@cloudflexit.com or 336-281-2871. Is there anything specific about our job opportunities or immigration services I can help with?";
+
+    // Default response with helpful suggestions
+    return `I'd be happy to help! Here are some things I can assist with:\n\n• 💼 Current job openings and application process\n• 🛂 Immigration and visa information\n• 📄 Resume optimization services\n• 🏢 Company information and services\n• 📞 Contact details and consultation scheduling\n\nWhat would you like to know more about? Or contact us directly at ${CONTACT_INFO.email} for personalized assistance.`;
   };
 
   const handleSendMessage = async () => {
